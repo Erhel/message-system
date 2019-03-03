@@ -2,48 +2,58 @@ package com.epam.vitebsk.entity;
 
 public class Message extends Entity {
 
-    private String subject;
-    private String message;
-    private User sender;
-    private User recipient;
+	private Long id;
+	private String subject;
+	private String message;
+	private User sender;
+	private User recipient;
 
-    public String getSubject() {
-        return subject;
-    }
+	public Long getId() {
+		return id;
+	}
 
-    public void setSubject(String subject) {
-        this.subject = subject;
-    }
+	public void setId(Long id) {
+		this.id = id;
+	}
 
-    public String getMessage() {
-        return message;
-    }
+	public String getSubject() {
+		return subject;
+	}
 
-    public void setMessage(String message) {
-        this.message = message;
-    }
+	public void setSubject(String subject) {
+		this.subject = subject;
+	}
 
-    public User getSender() {
-        return sender;
-    }
+	public String getMessage() {
+		return message;
+	}
 
-    public void setSender(User sender) {
-        this.sender = sender;
-    }
+	public void setMessage(String message) {
+		this.message = message;
+	}
 
-    public User getRecipient() {
-        return recipient;
-    }
+	public User getSender() {
+		return sender;
+	}
 
-    public void setRecipient(User recipient) {
-        this.recipient = recipient;
-    }
+	public void setSender(User sender) {
+		this.sender = sender;
+	}
 
-    public Message(String subject, String message, User sender, User recipient) {
-        this.subject = subject;
-        this.message = message;
-        this.sender = sender;
-        this.recipient = recipient;
-    }
+	public User getRecipient() {
+		return recipient;
+	}
+
+	public void setRecipient(User recipient) {
+		this.recipient = recipient;
+	}
+
+	public Message(String subject, String message, User sender, User recipient, Long id) {
+		this.id = id;
+		this.subject = subject;
+		this.message = message;
+		this.sender = sender;
+		this.recipient = recipient;
+	}
 
 }

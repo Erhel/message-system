@@ -11,24 +11,14 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-/**
- * 
- * @author Andrei_Markser
- *
- */
 public class ConnectionPool {
 
     private Logger log = LoggerFactory.getLogger(getClass());
 
     private int maxPool;
 
-    /** JDBC URL to use for connecting to the database server. */
     private String url;
-
-    /** Username to use for connecting to the database server. */
     private String user;
-
-    /** Password to use for connecting to the database server. */
     private String pass;
 
     private List<PooledConnection> free, used;
@@ -92,23 +82,13 @@ public class ConnectionPool {
       try {
         con = DriverManager.getConnection(url, user, pass);
 
-        // Add caching wrapper to connection.
         pcon = new PooledConnection(this, con);
         getLogger().info("Created a new connection");
 
-        // Check for warnings.
-        SQLWarning warn = con.getWarnings();
-
-        while (warn != null) {
-            getLogger().info("Warning - {}", warn.getMessage());
-          warn = warn.getNextWarning();
-        }
-      } catch (SQLException ex) {
-          getLogger().error("Can't create a new connection for {}", url, ex);
-        // Clean up open connection.
-        try {if (con != null) con.close();} catch (SQLException ex2) {getLogger().warn("Unable to close connection", ex2);}
-        // Rethrow exception.
-        throw ex;
+      } catch (SQLException e) {
+          getLogger().error("Can't create a new connection for {}", url, e);
+        try {if (con != null) con.close();} catch (SQLException e2) {getLogger().error("Unable to close connection", e2);}
+        throw e;
       }
 
       return pcon;

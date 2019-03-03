@@ -8,7 +8,7 @@
 
 	<servlet>
 		<servlet-name>action</servlet-name>
-		<servlet-class>com.epam.vitebsk.mvc.LoginServlet</servlet-class>
+		<servlet-class>com.epam.vitebsk.mvc.ActionServlet</servlet-class>
 		<init-param>
 			<param-name>debug</param-name>
 			<param-value>0</param-value>
