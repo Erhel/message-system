@@ -6,6 +6,7 @@ import java.util.Map;
 import javax.servlet.ServletException;
 
 import com.epam.vitebsk.mvc.action.LoginAction;
+import com.epam.vitebsk.mvc.action.message.MessageEditAction;
 import com.epam.vitebsk.mvc.action.message.MessageListAction;
 
 public class ActionFactory {
@@ -15,6 +16,7 @@ public class ActionFactory {
 	static {
 		actions.put("/login", LoginAction.class);
 		actions.put("/message/list", MessageListAction.class);
+		actions.put("/message/edit", MessageEditAction.class);
 	}
 	
 	public static Action getAction(String url) throws ServletException {

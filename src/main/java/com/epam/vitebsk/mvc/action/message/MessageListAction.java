@@ -15,14 +15,15 @@ import com.epam.vitebsk.service.ServiceFactory;
 public class MessageListAction extends Action {
 
 	@Override
-	public Response perform(HttpServletRequest req, HttpServletResponse resp, ServiceFactory serviceFactory) {		
+	public Response perform(HttpServletRequest req, HttpServletResponse resp, ServiceFactory serviceFactory) {
+
 		HttpSession session = req.getSession(false);
 		User user = (User) session.getAttribute("user");
 		if (user!=null && user.getId()!=null) {
 			List<Message> messages = serviceFactory.getMessageService().findMessagesBySenderId(user.getId());
-			System.out.println("ok");
 			req.setAttribute("receivedMessages", messages);
 		}
+		
 		return null;
 	}
 }

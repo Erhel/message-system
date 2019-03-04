@@ -16,4 +16,10 @@ public class MessageService {
 		messages.add(new Message("hello too", "i reply", mike, andrey, 2L));
 		return messages;
 	}
+
+	public Message getById(Long id) {
+		User andrey = new User("andrey.koval@mail.ru", null, "andrey", 1L);
+		User mike = new User("mike.lohan@mail.ru", null, "mike", 2L);
+		return new Message("hello", "it's me", andrey, mike, 1L); 
+	}
 }

@@ -4,7 +4,6 @@
 <%@taglib tagdir="/WEB-INF/tags" prefix="u" %>
 
 <u:navigation-bar title="Login">
-<body>
 	<h2>Login</h2>
 	<c:url var="urlLogin" value="/login.html" />
 	<form action="${urlLogin}" method="post">
@@ -14,5 +13,4 @@
 		<input id="password" name="password">
 		<button class="login">Log In</button>
 	</form>
-</body>
 </u:navigation-bar>

@@ -6,14 +6,18 @@
 <%@taglib tagdir="/WEB-INF/tags" prefix="u"%>
 
 <u:navigation-bar title="Messages">
-	<body>
-		<ul title="Received messages">
-			<c:forEach var="message" items="${receivedMessages}">
-				<a href="/message/view/${message.id}"><li>
-					<span class="content">${message.sender.displayName}</span><br>
+	<ul title="Received messages">
+		<c:forEach var="message" items="${receivedMessages}">
+		<c:url var="urlEditMessage" value="/message/edit.html">
+			<c:param name="id" value="${message.id}"/>
+		</c:url>
+			<a href="${urlEditMessage}" class="button">
+				<li>
+					<span class="content">${message.sender.displayName}</span>
+					<br>
 					<span class="content">${message.subject}</span>
-				</li></a>
-			</c:forEach>
-		</ul>
-	</body>
+				</li>
+			</a>
+		</c:forEach>
+	</ul>
 </u:navigation-bar>
