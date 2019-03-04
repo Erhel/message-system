@@ -20,14 +20,13 @@ public class LoginAction extends Action {
 		if (login != null && password != null) {
             User user = serviceFactory.getLoginService().findByLoginAndPassword(login, password);
 			if (user != null) {
-				HttpSession session = req.getSession();
+				HttpSession session = req.getSession(true);
 				session.setAttribute("user", user);
-				return new Response(true, "/login.html");
+				return new Response(true, "/message/list.html");
 			} else {
 				return new Response(true, "/notFound.html");
 			}
 		}
 		return null;
 	}
-
 }

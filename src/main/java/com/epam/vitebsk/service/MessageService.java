@@ -10,8 +10,8 @@ public class MessageService {
 
 	public List<Message> findMessagesBySenderId(Long id) {
 		ArrayList<Message> messages = new ArrayList<>();
-		User andrey = new User("andrey.koval@mail.ru", null, "andrey");
-		User mike = new User("mike.lohan@mail.ru", null, "mike");
+		User andrey = new User("andrey.koval@mail.ru", null, "andrey", 1L);
+		User mike = new User("mike.lohan@mail.ru", null, "mike", 2L);
 		messages.add(new Message("hello", "it's me", andrey, mike, 1L));
 		messages.add(new Message("hello too", "i reply", mike, andrey, 2L));
 		return messages;
