@@ -7,13 +7,12 @@
 
 <u:navigation-bar title="Messages">
 	<body>
-
 		<ul title="Received messages">
 			<c:forEach var="message" items="${receivedMessages}">
-				<li>
-					<span class="content">${message.sender.displayName}</span>
+				<a href="/message/view/${message.id}"><li>
+					<span class="content">${message.sender.displayName}</span><br>
 					<span class="content">${message.subject}</span>
-				</li>
+				</li></a>
 			</c:forEach>
 		</ul>
 	</body>
