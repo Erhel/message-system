@@ -5,7 +5,7 @@ import java.util.Map;
 
 import javax.servlet.ServletException;
 
-import com.epam.vitebsk.mvc.action.LoginAction;
+import com.epam.vitebsk.mvc.action.authorization.LoginAction;
 import com.epam.vitebsk.mvc.action.message.MessageEditAction;
 import com.epam.vitebsk.mvc.action.message.MessageListAction;
 import com.epam.vitebsk.mvc.action.message.MessageSaveAction;

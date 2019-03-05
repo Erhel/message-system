@@ -1,20 +1,27 @@
 package com.epam.vitebsk.service;
 
-import java.util.List;
-
 import com.epam.vitebsk.dao.DAOFactory;
-import com.epam.vitebsk.entity.Message;
 
 public class ServiceFactory {
 
 	private DAOFactory daoFactory;
 	
-	public LoginService getLoginService() {
-		return new LoginService();
+	public UserService getUserService() {
+	    
+	    UserService service = new UserService();
+	    
+	    service.setDao(daoFactory.getUserDao());
+	    
+		return service;
 	}
 	
 	public MessageService getMessageService() {
-		return new MessageService();
+	    
+	    MessageService service = new MessageService();
+        
+        service.setDao(daoFactory.getMessageDao());
+        
+        return service;
 	}
 
 	public ServiceFactory(DAOFactory daoFactory) {

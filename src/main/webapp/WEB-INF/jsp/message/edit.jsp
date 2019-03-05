@@ -6,11 +6,15 @@
 <u:navigation-bar title="Write message">
 	<c:url var="urlSaveMessage" value="/message/save.html">
         <c:param name="send" value="false"/>
-        <c:param name="id" value="${message.id}"/>
+        <c:if test="${not empty message}">
+            <c:param name="id" value="${message.id}"/>
+        </c:if>
     </c:url>
 	<c:url var="urlSendMessage" value="/message/save.html">
         <c:param name="send" value="true"/>
-        <c:param name="id" value="${message.id}"/>
+        <c:if test="${not empty message}">
+            <c:param name="id" value="${message.id}"/>
+        </c:if>
     </c:url>
 	<c:url var="urlBack" value="/message/list.html"/>
 	<form method="post" id="saveForm">

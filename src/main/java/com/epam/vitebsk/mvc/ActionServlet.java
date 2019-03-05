@@ -24,20 +24,20 @@ public class ActionServlet extends HttpServlet {
 	@Override
 	public void init(ServletConfig config) throws ServletException {
 		super.init(config);
-//		try {
-//			connectionPool = new ConnectionPool(10, 100, "jdbc:derby:message-system;create=true", "derby", "derby");
-//		} catch (SQLException e) {
-//			e.printStackTrace();
-//		}
+		try {
+			connectionPool = new ConnectionPool(10, 100, "jdbc:derby:memory:message-system;create=true", "derby", "derby");
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 
-		DAOFactory daoFactory = new DAOFactory(null);
+		DAOFactory daoFactory = new DAOFactory(connectionPool);
 
 		serviceFactory = new ServiceFactory(daoFactory);
 	}
 
 	@Override
 	public void destroy() {
-//		connectionPool.destroy();
+		connectionPool.destroy();
 	}
 
 	@Override

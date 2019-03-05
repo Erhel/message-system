@@ -10,10 +10,11 @@
 <head>
     <meta charset="UTF-8">
     <title>${title}</title>
-    <c:url var="urlCss" value="css/bootstrap.min.css"/>
+    <c:url var="urlCss" value="/css/bootstrap.min.css"/>
     <link href="${urlCss}" rel="stylesheet">
 </head>
 <body>
+
 <h1>Mail</h1>
 	<jsp:doBody/>
 </body>

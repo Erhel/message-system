@@ -1,35 +1,47 @@
 package com.epam.vitebsk.mvc.action.message;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
 import com.epam.vitebsk.entity.Message;
 import com.epam.vitebsk.entity.User;
 import com.epam.vitebsk.mvc.Action;
 import com.epam.vitebsk.mvc.Response;
+import com.epam.vitebsk.service.MessageService;
 import com.epam.vitebsk.service.ServiceFactory;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 public class MessageSaveAction extends Action {
 
     public Response perform(HttpServletRequest req, HttpServletResponse resp, ServiceFactory serviceFactory) {
 
         Boolean send = null;
-        Long id = null;
 
         try {
             send = Boolean.parseBoolean(req.getParameter("send"));
-            id = Long.parseLong(req.getParameter("id"));
         } catch (NumberFormatException e) {}
 
+        Message message = buildMessage(req);
+        
+        MessageService messageService = serviceFactory.getMessageService();
+        messageService.save(message);
+        
+        if (send) {
+            messageService.send(message);
+        }
 
-
-        return new Response(true, "/message/view.html");
+        return new Response(true, "/message/list.html");
     }
 
     private Message buildMessage(HttpServletRequest req) {
 
-        Long id = Long.parseLong(req.getParameter("id"));
+        Long id = null;
+        
+        try {
+            id = Long.parseLong(req.getParameter("id"));
+        } 
+        catch (NumberFormatException e) {}
+        
         String subject = req.getParameter("subject");
         String message = req.getParameter("message");
         String recipientUsername = req.getParameter("recipient");
