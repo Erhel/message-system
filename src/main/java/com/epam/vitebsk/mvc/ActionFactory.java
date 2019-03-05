@@ -8,6 +8,7 @@ import javax.servlet.ServletException;
 import com.epam.vitebsk.mvc.action.LoginAction;
 import com.epam.vitebsk.mvc.action.message.MessageEditAction;
 import com.epam.vitebsk.mvc.action.message.MessageListAction;
+import com.epam.vitebsk.mvc.action.message.MessageSaveAction;
 
 public class ActionFactory {
 	
@@ -17,6 +18,7 @@ public class ActionFactory {
 		actions.put("/login", LoginAction.class);
 		actions.put("/message/list", MessageListAction.class);
 		actions.put("/message/edit", MessageEditAction.class);
+		actions.put("/message/save", MessageSaveAction.class);
 	}
 	
 	public static Action getAction(String url) throws ServletException {

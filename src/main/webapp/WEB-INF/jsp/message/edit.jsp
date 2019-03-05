@@ -4,8 +4,14 @@
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
 <u:navigation-bar title="Write message">
-	<c:url var="urlSaveMessage" value="/message/save.html"/>
-	<c:url var="urlSendMessage" value="/message/send.html"/>
+	<c:url var="urlSaveMessage" value="/message/save.html">
+        <c:param name="send" value="false"/>
+        <c:param name="id" value="${message.id}"/>
+    </c:url>
+	<c:url var="urlSendMessage" value="/message/save.html">
+        <c:param name="send" value="true"/>
+        <c:param name="id" value="${message.id}"/>
+    </c:url>
 	<c:url var="urlBack" value="/message/list.html"/>
 	<form method="post" id="saveForm">
 		<label for="recipient">Recipient:</label>
