@@ -3,7 +3,6 @@ package com.epam.vitebsk.dao.jdbc.pool;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
-import java.sql.SQLWarning;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -31,6 +30,12 @@ public class ConnectionPool {
         this.url = url;
         this.user = username;
         this.pass = password;
+        
+        try {
+            Class.forName("org.apache.derby.jdbc.EmbeddedDriver");
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
 
         free = Collections.synchronizedList(new ArrayList<PooledConnection>(maxPool));
         used = Collections.synchronizedList(new ArrayList<PooledConnection>(maxPool));
@@ -78,9 +83,15 @@ public class ConnectionPool {
     protected PooledConnection createPooledConnection() throws SQLException {
       Connection con = null;
       PooledConnection pcon = null;
-
+      
       try {
-        con = DriverManager.getConnection(url, user, pass);
+          
+        if (user!=null && pass!=null) {
+            con = DriverManager.getConnection(url, user, pass);
+        }
+        else {
+            con = DriverManager.getConnection(url);
+        }
 
         pcon = new PooledConnection(this, con);
         getLogger().info("Created a new connection");

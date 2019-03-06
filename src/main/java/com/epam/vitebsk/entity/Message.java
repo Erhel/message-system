@@ -48,7 +48,7 @@ public class Message extends Entity {
 		this.recipient = recipient;
 	}
 
-	public Message(String subject, String message, User sender, User recipient, Long id) {
+	public Message(Long id, String subject, String message, User sender, User recipient) {
 		this.id = id;
 		this.subject = subject;
 		this.message = message;

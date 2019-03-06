@@ -45,10 +45,10 @@ public class MessageSaveAction extends Action {
         String subject = req.getParameter("subject");
         String message = req.getParameter("message");
         String recipientUsername = req.getParameter("recipient");
-        User recipient = new User(recipientUsername, null, null, null);
+        User recipient = new User(null , recipientUsername, null, null);
         //TODO: id for recipient
         HttpSession session = req.getSession(false);
         User sender = (User) session.getAttribute("user");
-        return new Message(subject, message, sender, recipient, id);
+        return new Message(id, subject, message, sender, recipient);
     }
 }

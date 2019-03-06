@@ -19,7 +19,7 @@ public class MessageEditAction extends Action {
 		} catch (NumberFormatException e) {}
 		
 		if (id!=null) {
-			Message message = serviceFactory.getMessageService().getById(id);
+			Message message = serviceFactory.getMessageService().find(id);
 			req.setAttribute("message", message);
 		}
 		

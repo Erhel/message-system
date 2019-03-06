@@ -47,7 +47,7 @@ public abstract class JdbcDaoSupport {
         }
     }
 
-    protected <T> T selectOne(final String sql, final Mapper<T> mapper, Object... params) throws SQLException {
+    protected <T> T selectOne(final String sql, final Mapper<T> mapper, Object... params) {
 
         PreparedStatement pst = null;
 

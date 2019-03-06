@@ -1,17 +1,10 @@
 package com.epam.vitebsk.service;
 
-import com.epam.vitebsk.dao.Dao;
-
-public abstract class Service<T> {
+public interface Service<ID, T> {
     
-    protected Dao<T> dao;
-
-    public Dao<T> getDao() {
-        return dao;
-    }
-
-    public void setDao(Dao<T> dao) {
-        this.dao = dao;
-    }
-
+    void save(T entity);
+    
+    T find(ID id);
+    
+    void delete(ID id);
 }

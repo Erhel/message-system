@@ -39,7 +39,7 @@ public class User extends Entity {
 		this.displayName = displayName;
 	}
 
-	public User(String username, String password, String displayName, Long id) {
+	public User(Long id, String username, String password, String displayName) {
 		this.id = id;
 		this.username = username;
 		this.password = password;
