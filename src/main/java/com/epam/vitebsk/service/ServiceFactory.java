@@ -20,6 +20,7 @@ public class ServiceFactory {
 	    MessageService service = new MessageService();
         
         service.setDao(daoFactory.getMessageDao());
+        service.setUserDao(daoFactory.getUserDao());
         
         return service;
 	}

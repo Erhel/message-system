@@ -25,7 +25,7 @@ public class ActionServlet extends HttpServlet {
 	public void init(ServletConfig config) throws ServletException {
 		super.init(config);
 		try {
-			connectionPool = new ConnectionPool(10, 100, "jdbc:derby:memory:message-system;create=true", null, null);
+			connectionPool = new ConnectionPool(10, 100, "jdbc:postgresql://localhost:5439/message-system", "postgres", "postgres");
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}

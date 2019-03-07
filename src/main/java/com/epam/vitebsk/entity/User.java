@@ -5,15 +5,6 @@ public class User extends Entity {
 	private String username;
 	private String password;
 	private String displayName;
-	private Long id;
-
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
-	}
 
 	public String getUsername() {
 		return username;

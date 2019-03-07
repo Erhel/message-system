@@ -6,8 +6,6 @@ import java.sql.SQLException;
 import com.epam.vitebsk.dao.Mapper;
 import com.epam.vitebsk.dao.UserDao;
 import com.epam.vitebsk.entity.User;
-import java.util.Map;
-import java.util.Objects;
 
 public class UserJdbcDao extends JdbcDaoSupport implements UserDao {
 
@@ -29,12 +27,6 @@ public class UserJdbcDao extends JdbcDaoSupport implements UserDao {
     
     public UserJdbcDao() {
         init("/sql.properties");
-    }
-    
-    @Override
-    public void ddl() {      
-        update(getSql("user.createTable"));
-        update(getSql("message.createTable"));
     }
     
     @Override
@@ -60,5 +52,10 @@ public class UserJdbcDao extends JdbcDaoSupport implements UserDao {
     @Override
     public User readByLoginAndPassword(String login, String password) {
         return selectOne(getSql("user.selectByLoginAndPassword"), mapper, login, password);
+    }
+
+    @Override
+    public User readByUsername(String username) {
+        return selectOne(getSql("user.selectByUsername"), mapper, username);
     }
 }

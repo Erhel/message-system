@@ -2,19 +2,10 @@ package com.epam.vitebsk.entity;
 
 public class Message extends Entity {
 
-	private Long id;
 	private String subject;
 	private String message;
 	private User sender;
 	private User recipient;
-
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
-	}
 
 	public String getSubject() {
 		return subject;

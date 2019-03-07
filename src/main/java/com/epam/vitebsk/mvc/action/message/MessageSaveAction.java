@@ -14,20 +14,21 @@ import com.epam.vitebsk.service.ServiceFactory;
 public class MessageSaveAction extends Action {
 
     public Response perform(HttpServletRequest req, HttpServletResponse resp, ServiceFactory serviceFactory) {
-
+        
+        Message message = buildMessage(req);
+        
         Boolean send = null;
 
         try {
             send = Boolean.parseBoolean(req.getParameter("send"));
         } catch (NumberFormatException e) {}
-
-        Message message = buildMessage(req);
         
         MessageService messageService = serviceFactory.getMessageService();
-        messageService.save(message);
         
         if (send) {
             messageService.send(message);
+        } else {
+            messageService.save(message);            
         }
 
         return new Response(true, "/message/list.html");
@@ -46,7 +47,6 @@ public class MessageSaveAction extends Action {
         String message = req.getParameter("message");
         String recipientUsername = req.getParameter("recipient");
         User recipient = new User(null , recipientUsername, null, null);
-        //TODO: id for recipient
         HttpSession session = req.getSession(false);
         User sender = (User) session.getAttribute("user");
         return new Message(id, subject, message, sender, recipient);

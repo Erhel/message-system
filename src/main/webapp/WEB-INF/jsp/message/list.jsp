@@ -12,7 +12,7 @@
 		</c:url>
 			<a href="${urlEditMessage}" class="button">
 				<li>
-					<span class="content">${message.sender.displayName}</span>
+					<span class="content">${message.recipient.displayName}</span>
 					<br>
 					<span class="content">${message.subject}</span>
 				</li>

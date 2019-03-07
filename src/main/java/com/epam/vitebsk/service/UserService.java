@@ -13,11 +13,4 @@ public class UserService extends EntityService<Long, User> {
         
         return user;
     }
-    
-    public void createSchema() {
-        
-        UserDao dao = getDao();
-        
-        dao.ddl();
-    }
 }
