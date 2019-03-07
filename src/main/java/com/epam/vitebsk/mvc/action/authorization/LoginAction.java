@@ -17,6 +17,8 @@ public class LoginAction extends Action {
         String password = req.getParameter("password");
         if (login != null && password != null) {
 
+
+
             serviceFactory.getUserService().createSchema();
             
             User andrey = new User(null, "andrey.koval@mail.ru", "simple", "Andrey");
@@ -33,6 +35,13 @@ public class LoginAction extends Action {
 //            User user = serviceFactory.getUserService().findByLoginAndPassword(login, password);
             User user = serviceFactory.getUserService().find(1L);
             if (user != null) {
+
+                HttpSession oldSession = req.getSession(false);
+
+                if (oldSession!=null) {
+                    oldSession.invalidate();
+                }
+
                 HttpSession session = req.getSession(true);
                 session.setAttribute("user", user);
                 return new Response(true, "/message/list.html");

@@ -121,6 +121,11 @@ public abstract class JdbcDaoSupport {
 
     public String getSql(String name) {
         Objects.requireNonNull(name);
-        return map.get(name);
+
+        String sql = map.get(name);
+        String entity = name.split(".")[0];
+        sql.replaceAll(entity, "`" + entity + "`");
+
+        return sql;
     }
 }

@@ -19,5 +19,15 @@
         <servlet-name>action</servlet-name>
         <url-pattern>*.html</url-pattern>
     </servlet-mapping>
+	
+	<filter>
+		<filter-name>securityFilter</filter-name>
+		<filter-class>com.epam.vitebsk.mvc.filter.SecurityFilter</filter-class>
+	</filter>
+
+	<filter-mapping>
+		<filter-name>securityFilter</filter-name>
+		<url-pattern>*.html</url-pattern>
+	</filter-mapping>
 
 </web-app>

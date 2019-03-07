@@ -6,6 +6,8 @@ import java.sql.SQLException;
 import com.epam.vitebsk.dao.Mapper;
 import com.epam.vitebsk.dao.UserDao;
 import com.epam.vitebsk.entity.User;
+import java.util.Map;
+import java.util.Objects;
 
 public class UserJdbcDao extends JdbcDaoSupport implements UserDao {
 
