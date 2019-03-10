@@ -13,7 +13,7 @@ import com.epam.vitebsk.dao.DAOFactory;
 import com.epam.vitebsk.dao.jdbc.pool.ConnectionPool;
 import com.epam.vitebsk.service.ServiceFactory;
 
-public class ActionServlet extends HttpServlet {
+public class ServletDispatcher extends HttpServlet {
 
 	private static final long serialVersionUID = 1L;
 
@@ -56,10 +56,10 @@ public class ActionServlet extends HttpServlet {
 		int index = url.lastIndexOf(".html");
 		url = url.substring(context.length(), index);
 
-		Action action = ActionFactory.getAction(url);
+		Controller controller = ControllerFactory.getController(url);
 		Response response = null;
-		if (action != null) {
-			response = action.perform(req, resp, serviceFactory);
+		if (controller != null) {
+			response = controller.handle(req, resp, serviceFactory);
 		}
 		
 		if (response!=null && response.isRedirect()) {

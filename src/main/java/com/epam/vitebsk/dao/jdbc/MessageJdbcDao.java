@@ -28,7 +28,7 @@ public class MessageJdbcDao extends JdbcDaoSupport implements MessageDao {
         }
     };
     
-    public MessageJdbcDao() {
+	public MessageJdbcDao() {
         init("/sql.properties");
     }
     
@@ -55,5 +55,10 @@ public class MessageJdbcDao extends JdbcDaoSupport implements MessageDao {
     @Override
     public List<Message> readBySenderId(Long id) {
         return selectList(getSql("message.selectListBySenderId"), mapper, id);
+    }
+    
+    @Override
+    public List<Message> readByRecipientId(Long id) {
+    	return selectList(getSql("message.selectListByRecipientId"), mapper, id);
     }
 }

@@ -60,11 +60,12 @@ public abstract class JdbcDaoSupport {
             
             if (pst.execute()) {
                 rs = pst.getResultSet();
-                rs.next();
-                return mapper.map(rs);
-            } else {
-                return null;
+                if (rs.isBeforeFirst()) {                	
+                	rs.next();
+                	return mapper.map(rs);
+                }
             }
+            return null;
         } catch (SQLException e) {
             throw new RuntimeException(e);
         } finally {
@@ -104,7 +105,8 @@ public abstract class JdbcDaoSupport {
     }
 
     protected void update(final String sql, Object... params) {
-        PreparedStatement pst = null;
+    	
+    	PreparedStatement pst = null;
 
         try {
             pst = connection.prepareStatement(sql);

@@ -6,14 +6,14 @@ import javax.servlet.http.HttpSession;
 
 import com.epam.vitebsk.entity.Message;
 import com.epam.vitebsk.entity.User;
-import com.epam.vitebsk.mvc.Action;
+import com.epam.vitebsk.mvc.Controller;
 import com.epam.vitebsk.mvc.Response;
 import com.epam.vitebsk.service.ServiceFactory;
 
-public class MessageEditAction extends Action {
+public class MessageEditController extends Controller {
 
 	@Override
-	public Response perform(HttpServletRequest req, HttpServletResponse resp, ServiceFactory serviceFactory) {
+	public Response handle(HttpServletRequest req, HttpServletResponse resp, ServiceFactory serviceFactory) {
 		Long id = null;
 		
 		try {
@@ -27,9 +27,10 @@ public class MessageEditAction extends Action {
 			
 			User currentUser = (User) session.getAttribute("user");
 			
-			User user = message.getSender();
+			User sender = message.getSender();
+			User recipient = message.getRecipient();
 			
-			if (user.getId()!=currentUser.getId()) {
+			if (sender.getId()!=currentUser.getId() && recipient.getId()!=currentUser.getId()) {
 			    return new Response(true, "/message/list.html");
 			}
 			

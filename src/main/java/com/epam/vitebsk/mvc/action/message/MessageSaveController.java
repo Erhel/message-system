@@ -6,14 +6,14 @@ import javax.servlet.http.HttpSession;
 
 import com.epam.vitebsk.entity.Message;
 import com.epam.vitebsk.entity.User;
-import com.epam.vitebsk.mvc.Action;
+import com.epam.vitebsk.mvc.Controller;
 import com.epam.vitebsk.mvc.Response;
 import com.epam.vitebsk.service.MessageService;
 import com.epam.vitebsk.service.ServiceFactory;
 
-public class MessageSaveAction extends Action {
+public class MessageSaveController extends Controller {
 
-    public Response perform(HttpServletRequest req, HttpServletResponse resp, ServiceFactory serviceFactory) {
+    public Response handle(HttpServletRequest req, HttpServletResponse resp, ServiceFactory serviceFactory) {
         
         Message message = buildMessage(req);
         

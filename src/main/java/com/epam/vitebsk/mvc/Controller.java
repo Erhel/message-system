@@ -5,6 +5,6 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.epam.vitebsk.service.ServiceFactory;
 
-public abstract class Action {	
-	public abstract Response perform(HttpServletRequest req, HttpServletResponse resp, ServiceFactory serviceFactory);
+public abstract class Controller {	
+	public abstract Response handle(HttpServletRequest req, HttpServletResponse resp, ServiceFactory serviceFactory);
 }

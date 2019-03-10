@@ -5,14 +5,14 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import com.epam.vitebsk.entity.User;
-import com.epam.vitebsk.mvc.Action;
+import com.epam.vitebsk.mvc.Controller;
 import com.epam.vitebsk.mvc.Response;
 import com.epam.vitebsk.service.ServiceFactory;
 
-public class LoginAction extends Action {
+public class LoginController extends Controller {
 
     @Override
-    public Response perform(HttpServletRequest req, HttpServletResponse resp, ServiceFactory serviceFactory) {
+    public Response handle(HttpServletRequest req, HttpServletResponse resp, ServiceFactory serviceFactory) {
         
         String login = req.getParameter("login");
         String password = req.getParameter("password");
@@ -32,7 +32,7 @@ public class LoginAction extends Action {
                 session.setAttribute("user", user);
                 return new Response(true, "/message/list.html");
             } else {
-                return new Response(true, "/login.html?message=incorrect password or login");
+                return new Response(true, "/authorization/login.html?message=incorrect password or login");
             }
         }        
         return null;

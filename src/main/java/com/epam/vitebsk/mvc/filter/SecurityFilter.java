@@ -31,7 +31,7 @@ public class SecurityFilter implements Filter {
         String context = req.getContextPath();
         String url = req.getRequestURI();
         url = url.substring(context.length());
-        if (url.intern() == "/login.html") {
+        if (url.intern() == "/authorization/login.html") {
             chain.doFilter(req, resp);
             return;
         }
@@ -48,7 +48,7 @@ public class SecurityFilter implements Filter {
                 return;
             }
         }
-        resp.sendRedirect(context + "/login.html");
+        resp.sendRedirect(context + "/authorization/login.html");
     }
 
     @Override
