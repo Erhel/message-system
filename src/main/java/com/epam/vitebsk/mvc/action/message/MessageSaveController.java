@@ -23,6 +23,7 @@ public class MessageSaveController extends Controller {
             send = Boolean.parseBoolean(req.getParameter("send"));
         } catch (NumberFormatException e) {}
         
+        //TODO: separate to send and save
         MessageService messageService = serviceFactory.getMessageService();
         
         if (send) {
@@ -40,8 +41,8 @@ public class MessageSaveController extends Controller {
         
         try {
             id = Long.parseLong(req.getParameter("id"));
-        } 
-        catch (NumberFormatException e) {}
+        } catch (NumberFormatException e) {
+        }
         
         String subject = req.getParameter("subject");
         String message = req.getParameter("message");

@@ -7,6 +7,7 @@ import javax.servlet.ServletException;
 
 import com.epam.vitebsk.mvc.action.authorization.LoginController;
 import com.epam.vitebsk.mvc.action.authorization.LogoutController;
+import com.epam.vitebsk.mvc.action.authorization.RegistrationController;
 import com.epam.vitebsk.mvc.action.message.MessageEditController;
 import com.epam.vitebsk.mvc.action.message.MessageListController;
 import com.epam.vitebsk.mvc.action.message.MessageSaveController;
@@ -18,6 +19,7 @@ public class ControllerFactory {
 	static {
 		controllers.put("/authorization/login", LoginController.class);
 		controllers.put("/authorization/logout", LogoutController.class);
+		controllers.put("/authorization/registration", RegistrationController.class);
 		controllers.put("/message/list", MessageListController.class);
 		controllers.put("/message/edit", MessageEditController.class);
 		controllers.put("/message/save", MessageSaveController.class);
