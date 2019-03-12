@@ -9,6 +9,10 @@ public class Response {
 		this.url = url;
 		this.redirect = redirect;
 	}
+	
+	public Response(String url) {
+	    this(true, url);
+	}	
 
 	public boolean isRedirect() {
 		return redirect;

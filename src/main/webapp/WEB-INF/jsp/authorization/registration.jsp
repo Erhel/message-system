@@ -8,7 +8,7 @@
 			<div class="col-4 mx-auto">
 				<div class="card">
 					<div class="card-header">
-						<div class="d-flex justify-content-center">                        
+						<div class="text-center">                        
                             <h3 class="card-title mb-1 mt-1">Sign Up</h3>
                         </div>
 					</div>
@@ -16,16 +16,16 @@
 						<c:url var="urlSaveUser" value="/authorization/registration.html" />
 						<form action="${urlSaveUser}" method="post">
 							<div class="form-group">
-								<input name="displayName" type="text" class="form-control" maxlength="128" placeholder="Enter nickname">
+								<input name="displayName" type="text" class="form-control" placeholder="Enter nickname">
 							</div>
 							<div class="form-group">
-								<input name="username" type="email" class="form-control" maxlength="128" placeholder="Enter email">
+								<input name="username" type="email" class="form-control"  placeholder="Enter email">
 							</div>
 							<div class="form-group">
-								<input name="password" pattern=".{0}|{6,128}" required title="password should've at least 6 characters" type="password" class="form-control" placeholder="Enter password">
+								<input name="password" required title="password should've at least 6 characters" type="password" class="form-control" placeholder="Enter password">
 							</div>
 							<div class="form-group">
-								<input name="confirm" pattern=".{0}|{6,128}" required title="password should've at least 6 characters" type="password" class="form-control" placeholder="Confirm password">
+								<input name="confirm" required title="password should've at least 6 characters" type="password" class="form-control" placeholder="Confirm password">
 							</div>
 							<button type="submit" class="btn btn-block btn-primary">Create account</button>
 						</form>

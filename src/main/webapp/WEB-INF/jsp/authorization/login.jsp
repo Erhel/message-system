@@ -8,7 +8,7 @@
 			<div class="col-4 mx-auto">
 				<div class="card">
 					<div class="card-header">
-                        <div class="d-flex justify-content-center">                        
+                        <div class="text-center">                        
     						<h3 class="card-title mb-1 mt-1">Sign In</h3>
                         </div>
 					</div>

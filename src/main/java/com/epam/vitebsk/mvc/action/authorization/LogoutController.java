@@ -8,7 +8,7 @@ import com.epam.vitebsk.mvc.Controller;
 import com.epam.vitebsk.mvc.Response;
 import com.epam.vitebsk.service.ServiceFactory;
 
-public class LogoutController extends Controller {
+public class LogoutController implements Controller {
 
 	@Override
 	public Response handle(HttpServletRequest req, HttpServletResponse resp, ServiceFactory serviceFactory) {
@@ -17,6 +17,6 @@ public class LogoutController extends Controller {
 		if (session!=null) {
 			session.invalidate();
 		}
-		return new Response(true, "/authorization/login.html");
+		return new Response("/authorization/login.html");
 	}
 }

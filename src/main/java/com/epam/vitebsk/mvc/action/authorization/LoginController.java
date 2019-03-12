@@ -9,7 +9,7 @@ import com.epam.vitebsk.mvc.Controller;
 import com.epam.vitebsk.mvc.Response;
 import com.epam.vitebsk.service.ServiceFactory;
 
-public class LoginController extends Controller {
+public class LoginController implements Controller {
 
     @Override
     public Response handle(HttpServletRequest req, HttpServletResponse resp, ServiceFactory serviceFactory) {
@@ -18,6 +18,10 @@ public class LoginController extends Controller {
         String password = req.getParameter("password");
         
         if (login != null && password != null) {
+            
+            if (password.length() < 6) {
+                return new Response("/authorization/login.html?msg=password should've at least 6 symbols");
+            }
             
             User user = serviceFactory.getUserService().findByLoginAndPassword(login, password);
             if (user != null) {
@@ -30,9 +34,9 @@ public class LoginController extends Controller {
 
                 HttpSession session = req.getSession(true);
                 session.setAttribute("user", user);
-                return new Response(true, "/message/list.html");
+                return new Response("/message/list.html");
             } else {
-                return new Response(true, "/authorization/login.html?message=incorrect password or login");
+                return new Response("/authorization/login.html?msg=incorrect password or login");
             }
         }        
         return null;

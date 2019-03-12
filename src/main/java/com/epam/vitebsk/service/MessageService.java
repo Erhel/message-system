@@ -3,8 +3,8 @@ package com.epam.vitebsk.service;
 import java.util.Date;
 import java.util.List;
 import java.util.Properties;
-import java.util.Timer;
-import java.util.TimerTask;
+import java.util.Set;
+import java.util.TreeSet;
 
 import javax.mail.MessagingException;
 import javax.mail.Session;
@@ -78,12 +78,9 @@ public class MessageService extends EntityService<Long, Message> {
 		} catch (MessagingException e) {
 			e.printStackTrace();
 		}
-        
-        
-        
     }
     
-    public void send() {
+    public void receive() {
         
     }
 
@@ -93,27 +90,7 @@ public class MessageService extends EntityService<Long, Message> {
         MessageDao dao = getDao();
         message.setRecipient(recipient);
         
-        if (message.getId() == null) {
-            dao.create(message);
-        } else {
-            dao.update(message);
-        }
-    }
-    
-    public void schedulingRepeatedTask() {
-        TimerTask task = new TimerTask() {
-            
-            @Override
-            public void run() {
-                send();
-            }
-        };
-        
-        Timer timer = new Timer();
-        
-        long delay = 1000L;
-        long period = 1000L;
-        timer.scheduleAtFixedRate(task, delay, period);
+        dao.create(message);
     }
     
     @Override
@@ -127,5 +104,33 @@ public class MessageService extends EntityService<Long, Message> {
 
     public void setUserDao(UserDao userDao) {
         this.userDao = userDao;
+    }
+
+    public Set<String> findUsernamesByUserId(Long id) {
+
+        MessageDao dao = getDao();
+        
+        List<Message> receivedMessages = dao.readByRecipientId(id);
+        List<Message> sentMessages = dao.readBySenderId(id);
+        
+        Set<Long> userIds = new TreeSet<Long>();
+        Set<String> usernames = new TreeSet<String>();
+        
+        for (Message message : receivedMessages) {
+            Long userId = message.getSender().getId();
+            userIds.add(userId);
+        }
+        
+        for (Message message : sentMessages) {
+            Long userId = message.getRecipient().getId();
+            userIds.add(userId);
+        }
+        
+        for (Long userId : userIds) {
+            User user = userDao.read(userId);
+            usernames.add(user.getUsername());
+        }
+        
+        return usernames;
     }
 }

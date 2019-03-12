@@ -13,7 +13,7 @@ import com.epam.vitebsk.mvc.Response;
 import com.epam.vitebsk.service.MessageService;
 import com.epam.vitebsk.service.ServiceFactory;
 
-public class MessageListController extends Controller {
+public class MessageListController implements Controller {
 
 	@Override
 	public Response handle(HttpServletRequest req, HttpServletResponse resp, ServiceFactory serviceFactory) {

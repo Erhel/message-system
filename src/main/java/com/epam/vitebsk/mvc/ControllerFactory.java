@@ -11,6 +11,7 @@ import com.epam.vitebsk.mvc.action.authorization.RegistrationController;
 import com.epam.vitebsk.mvc.action.message.MessageEditController;
 import com.epam.vitebsk.mvc.action.message.MessageListController;
 import com.epam.vitebsk.mvc.action.message.MessageSaveController;
+import com.epam.vitebsk.mvc.action.message.MessageSendController;
 
 public class ControllerFactory {
 	
@@ -23,6 +24,7 @@ public class ControllerFactory {
 		controllers.put("/message/list", MessageListController.class);
 		controllers.put("/message/edit", MessageEditController.class);
 		controllers.put("/message/save", MessageSaveController.class);
+		controllers.put("/message/send", MessageSendController.class);
 	}
 	
 	public static Controller getController(String url) throws ServletException {
@@ -34,16 +36,5 @@ public class ControllerFactory {
 		} catch (InstantiationException | IllegalAccessException e) {
 			throw new ServletException(e);
 		}
-		
-//		String [] arr = url.split("//");
-//		System.out.println(url);
-//		StringBuffer buffer = new StringBuffer();
-//		for (String a : arr) {
-//			a = a.substring(0, 1).toUpperCase() + a.substring(1);
-//			buffer.append(a);
-//		}
-//		buffer.append("Action");
-//		
-//		return (Action) Class.forName(buffer.toString()).newInstance();
 	}
 }

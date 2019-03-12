@@ -1,5 +1,7 @@
 package com.epam.vitebsk.mvc.action.message;
 
+import java.util.Set;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -8,30 +10,37 @@ import com.epam.vitebsk.entity.Message;
 import com.epam.vitebsk.entity.User;
 import com.epam.vitebsk.mvc.Controller;
 import com.epam.vitebsk.mvc.Response;
+import com.epam.vitebsk.service.MessageService;
 import com.epam.vitebsk.service.ServiceFactory;
 
-public class MessageEditController extends Controller {
+public class MessageEditController implements Controller {
 
 	@Override
 	public Response handle(HttpServletRequest req, HttpServletResponse resp, ServiceFactory serviceFactory) {
-		Long id = null;
+	    
+	    Long id = null;
 		
 		try {
 			id = Long.parseLong(req.getParameter("id"));
 		} catch (NumberFormatException e) {}
 		
+		MessageService messageService = serviceFactory.getMessageService();
+		
+        HttpSession session = req.getSession(false);
+        User currentUser = (User) session.getAttribute("user");
+	    
+	    Set<String> usernames = messageService.findUsernamesByUserId(currentUser.getId());
+		
+        req.setAttribute("usernames", usernames);
+        
 		if (id!=null) {
-			Message message = serviceFactory.getMessageService().find(id);
-			
-			HttpSession session = req.getSession(false);
-			
-			User currentUser = (User) session.getAttribute("user");
+			Message message = messageService.find(id);
 			
 			User sender = message.getSender();
 			User recipient = message.getRecipient();
 			
 			if (sender.getId()!=currentUser.getId() && recipient.getId()!=currentUser.getId()) {
-			    return new Response(true, "/message/list.html");
+			    return new Response("/message/list.html");
 			}
 			
 			req.setAttribute("message", message);
@@ -39,5 +48,4 @@ public class MessageEditController extends Controller {
 		
 		return null;
 	}
-
 }
