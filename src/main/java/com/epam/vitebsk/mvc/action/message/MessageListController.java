@@ -27,6 +27,7 @@ public class MessageListController implements Controller {
 			
 			List<Message> receivedMessages = service.findMessagesByRecipientId(id);
 			List<Message> sentMessages = service.findMessagesBySenderId(id);
+			
 			req.setAttribute("receivedMessages", receivedMessages);
 			req.setAttribute("sentMessages", sentMessages);
 		}

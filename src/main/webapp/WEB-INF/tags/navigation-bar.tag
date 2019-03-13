@@ -30,9 +30,6 @@
 			<c:if test="${not empty param.msg}">
                 <span class="navbar-text pr-4">${param.msg}</span>
 			</c:if>
-            <c:if test="${not empty error}">
-                <span class="navbar-text pr-4">${error}</span>
-            </c:if>
 			<c:if test="${not empty user}">
 				<c:url var="urlLogout" value="/authorization/logout.html"/>
 				<span class="navbar-brand">${user.displayName}</span>

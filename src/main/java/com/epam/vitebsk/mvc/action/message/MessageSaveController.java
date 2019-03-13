@@ -2,6 +2,7 @@ package com.epam.vitebsk.mvc.action.message;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import com.epam.vitebsk.entity.Message;
 import com.epam.vitebsk.mvc.Controller;
@@ -13,31 +14,37 @@ public class MessageSaveController extends MessageSupport implements Controller 
 
     @Override
     public Response handle(HttpServletRequest req, HttpServletResponse resp, ServiceFactory serviceFactory) {
-        
-        String username = String.valueOf(req.getParameter("recipient"));
-        String subject = String.valueOf(req.getParameter("subject"));
-        String msg = String.valueOf(req.getParameter("message"));
-        
-        if (username!=null && subject!=null && msg!=null) {
-            
+
+        String username = req.getParameter("recipient");
+        String subject = req.getParameter("subject");
+        String msg = req.getParameter("message");
+
+        if (username != null && subject != null && msg != null) {
+
+            HttpSession session = null;
+
             Message message = buildMessage(req);
+
+            if (!username.matches(".*@.*")) {
+                return new Response("/message/edit.html?msg=wrong email");
+            }
             
             if (subject.length() > 256) {
-                req.setAttribute("message", message);
-                req.setAttribute("error", "subject should've less than 256 symbols");
-                return new Response(false, "/message/edit");
+                session = req.getSession(false);
+                session.setAttribute("message", message);
+                return new Response("/message/edit.html?msg=subject should've less than 256 symbols");
             }
-            
+
             if (msg.length() > 1024) {
-                req.setAttribute("message", message);
-                req.setAttribute("error", "text of message should've less than 1024 symbols");
-                return new Response(false, "/message/edit");
+                session = req.getSession(false);
+                session.setAttribute("message", message);
+                return new Response("/message/edit.html?msg=text of message should've less than 1024 symbols");
             }
-            
+
             MessageService messageService = serviceFactory.getMessageService();
-            messageService.save(message);            
+            messageService.save(message);
         }
-        
+
         return new Response("/message/list.html");
     }
 }

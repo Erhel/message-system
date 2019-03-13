@@ -1,14 +1,12 @@
 package com.epam.vitebsk.service;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
 import java.util.Date;
 import java.util.Properties;
 
-import javax.mail.Folder;
+import javax.mail.Authenticator;
 import javax.mail.MessagingException;
+import javax.mail.PasswordAuthentication;
 import javax.mail.Session;
-import javax.mail.Store;
 import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
@@ -20,8 +18,8 @@ public class MailService {
     private boolean auth;
     private String host;
     private String port;
-    private String username;
-    private String password;
+    final private String username;
+    final private String password;
     
     public MailService(boolean auth, String host, String port, String username, String password) {
         this.auth = auth;
@@ -57,31 +55,6 @@ public class MailService {
         }
     }
     
-    public Message receive() {
-        try {
-            Store store = getSession("pop3").getStore("pop3");
-            
-            if (auth) {
-                store.connect(username, password);
-            } else {
-                store.connect();
-            }
-            
-            Folder folder = store.getFolder("INBOX");
-            folder.open(Folder.READ_ONLY);
-            
-            BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
-            
-            javax.mail.Message[] messages = folder.getMessages();
-            
-            
-        } catch (MessagingException e) {
-            e.printStackTrace();
-        }
-        
-        return null;
-    }
-    
     public javax.mail.Message compose(Message message) throws MessagingException {
         
         String to = message.getRecipient().getUsername();
@@ -104,10 +77,27 @@ public class MailService {
         properties.put("mail." + protocol + ".host", host);
         properties.put("mail." + protocol + ".port", port);
         properties.put("mail." + protocol + ".auth", auth);
+        properties.put("mail." + protocol + ".ssl.enable", "true");
         return properties;
     }
     
     public Session getSession(String protocol) {
+        if (auth) {
+            return Session.getDefaultInstance(getProperties(protocol), new Authenticator() {
+                @Override
+                protected PasswordAuthentication getPasswordAuthentication() {
+                    return new PasswordAuthentication(username, password);
+                }
+            });
+        }
         return Session.getDefaultInstance(getProperties(protocol));
+    }
+
+    public void setHost(String host) {
+        this.host = host;
+    }
+
+    public void setPort(String port) {
+        this.port = port;
     }
 }

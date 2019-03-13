@@ -28,13 +28,15 @@ public class MessageEditController implements Controller {
 		
         HttpSession session = req.getSession(false);
         User currentUser = (User) session.getAttribute("user");
+        
+        Message message = null;
 	    
 	    Set<String> usernames = messageService.findUsernamesByUserId(currentUser.getId());
 		
         req.setAttribute("usernames", usernames);
         
 		if (id!=null) {
-			Message message = messageService.find(id);
+			message = messageService.find(id);
 			
 			User sender = message.getSender();
 			User recipient = message.getRecipient();
@@ -44,6 +46,12 @@ public class MessageEditController implements Controller {
 			}
 			
 			req.setAttribute("message", message);
+		} else {
+		    message = (Message) session.getAttribute("message");
+		    if (message!= null) {
+		        session.setAttribute("message", null);
+		        req.setAttribute("message", message);
+		    }
 		}
 		
 		return null;

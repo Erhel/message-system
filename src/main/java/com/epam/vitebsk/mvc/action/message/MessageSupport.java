@@ -11,9 +11,9 @@ public abstract class MessageSupport {
     protected Message buildMessage(HttpServletRequest req) {
 
         Long id = null;       
-        String subject = String.valueOf(req.getParameter("subject"));
-        String message = String.valueOf(req.getParameter("message"));
-        String recipientUsername = String.valueOf(req.getParameter("recipient"));
+        String subject = req.getParameter("subject");
+        String message = req.getParameter("message");
+        String recipientUsername = req.getParameter("recipient");
         User recipient = new User(null , recipientUsername, null, null);
         HttpSession session = req.getSession(false);
         User sender = (User) session.getAttribute("user");

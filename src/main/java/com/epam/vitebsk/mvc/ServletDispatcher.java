@@ -29,7 +29,7 @@ public class ServletDispatcher extends HttpServlet {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-
+		
 		DAOFactory daoFactory = new DAOFactory(connectionPool);
 
 		serviceFactory = new ServiceFactory(daoFactory);

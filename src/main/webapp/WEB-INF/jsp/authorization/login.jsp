@@ -19,7 +19,7 @@
 								<input name="login" type="email" class="form-control" placeholder="Enter email">
 							</div>
 							<div class="form-group">
-								<input name="password" type="password" class="form-control" placeholder="Enter password">
+								<input name="password" type="password" required class="form-control" placeholder="Enter password">
 							</div>
 							<button type="submit" class="btn btn-block btn-primary">Login</button>
 						</form>
