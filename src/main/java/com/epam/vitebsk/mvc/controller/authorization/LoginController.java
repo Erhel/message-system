@@ -10,7 +10,11 @@ import com.epam.vitebsk.mvc.Response;
 import com.epam.vitebsk.service.ServiceFactory;
 
 <<<<<<< HEAD:src/main/java/com/epam/vitebsk/mvc/controller/authorization/LoginController.java
+<<<<<<< HEAD:src/main/java/com/epam/vitebsk/mvc/controller/authorization/LoginController.java
 public class LoginController extends Encrypter implements Controller {
+=======
+public class LoginController extends Decrypter implements Controller {
+>>>>>>> fca562845777d22a8aee753d6755f6781d0cf618:src/main/java/com/epam/vitebsk/mvc/controller/authorization/LoginController.java
 =======
 public class LoginController extends Decrypter implements Controller {
 >>>>>>> fca562845777d22a8aee753d6755f6781d0cf618:src/main/java/com/epam/vitebsk/mvc/controller/authorization/LoginController.java
@@ -28,7 +32,11 @@ public class LoginController extends Decrypter implements Controller {
             }
             
 <<<<<<< HEAD:src/main/java/com/epam/vitebsk/mvc/controller/authorization/LoginController.java
+<<<<<<< HEAD:src/main/java/com/epam/vitebsk/mvc/controller/authorization/LoginController.java
             String hashPassword = Encrypter.toHashPassword(password, login);
+=======
+            String hashPassword = Decrypter.toHashPassword(password, login);
+>>>>>>> fca562845777d22a8aee753d6755f6781d0cf618:src/main/java/com/epam/vitebsk/mvc/controller/authorization/LoginController.java
 =======
             String hashPassword = Decrypter.toHashPassword(password, login);
 >>>>>>> fca562845777d22a8aee753d6755f6781d0cf618:src/main/java/com/epam/vitebsk/mvc/controller/authorization/LoginController.java

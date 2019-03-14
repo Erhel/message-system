@@ -9,7 +9,11 @@ import com.epam.vitebsk.mvc.Response;
 import com.epam.vitebsk.service.ServiceFactory;
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 public class RegistrationController extends Encrypter implements Controller {
+=======
+public class RegistrationController extends Decrypter implements Controller {
+>>>>>>> fca562845777d22a8aee753d6755f6781d0cf618
 =======
 public class RegistrationController extends Decrypter implements Controller {
 >>>>>>> fca562845777d22a8aee753d6755f6781d0cf618
@@ -45,7 +49,11 @@ public class RegistrationController extends Decrypter implements Controller {
 		    }
 			
 <<<<<<< HEAD
+<<<<<<< HEAD
 		    String hashPassword = Encrypter.toHashPassword(password, username);
+=======
+		    String hashPassword = Decrypter.toHashPassword(password, username);
+>>>>>>> fca562845777d22a8aee753d6755f6781d0cf618
 =======
 		    String hashPassword = Decrypter.toHashPassword(password, username);
 >>>>>>> fca562845777d22a8aee753d6755f6781d0cf618
