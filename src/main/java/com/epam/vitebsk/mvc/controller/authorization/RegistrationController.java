@@ -8,15 +8,7 @@ import com.epam.vitebsk.mvc.Controller;
 import com.epam.vitebsk.mvc.Response;
 import com.epam.vitebsk.service.ServiceFactory;
 
-<<<<<<< HEAD
-<<<<<<< HEAD
 public class RegistrationController extends Encrypter implements Controller {
-=======
-public class RegistrationController extends Decrypter implements Controller {
->>>>>>> fca562845777d22a8aee753d6755f6781d0cf618
-=======
-public class RegistrationController extends Decrypter implements Controller {
->>>>>>> fca562845777d22a8aee753d6755f6781d0cf618
 
 	@Override
 	public Response handle(HttpServletRequest req, HttpServletResponse resp, ServiceFactory serviceFactory) {
@@ -48,15 +40,7 @@ public class RegistrationController extends Decrypter implements Controller {
 		        return new Response("/authorization/registration.html?info=password and confirm password are not matched");
 		    }
 			
-<<<<<<< HEAD
-<<<<<<< HEAD
 		    String hashPassword = Encrypter.toHashPassword(password, username);
-=======
-		    String hashPassword = Decrypter.toHashPassword(password, username);
->>>>>>> fca562845777d22a8aee753d6755f6781d0cf618
-=======
-		    String hashPassword = Decrypter.toHashPassword(password, username);
->>>>>>> fca562845777d22a8aee753d6755f6781d0cf618
 		    
 			User user = new User(null, username, hashPassword, displayName);
 			serviceFactory.getUserService().save(user);
