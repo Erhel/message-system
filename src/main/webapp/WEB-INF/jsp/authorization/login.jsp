@@ -4,7 +4,7 @@
 
 <u:navigation-bar title="Login">
 	<div class="container">
-		<div class="d-flex align-items-center" style="height: 100vh">
+		<div class="d-flex align-items-center" style="height: 90vh">
 			<div class="col-4 mx-auto">
 				<div class="card">
 					<div class="card-header">
@@ -19,7 +19,7 @@
 								<input name="login" type="email" class="form-control" placeholder="Enter email">
 							</div>
 							<div class="form-group">
-								<input name="password" type="password" class="form-control" placeholder="Enter password">
+								<input name="password" type="password" required class="form-control" placeholder="Enter password">
 							</div>
 							<button type="submit" class="btn btn-block btn-primary">Login</button>
 						</form>

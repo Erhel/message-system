@@ -1,16 +1,9 @@
 package com.epam.vitebsk.service;
 
-import java.util.Date;
 import java.util.List;
-import java.util.Properties;
 import java.util.Set;
 import java.util.TreeSet;
-
-import javax.mail.MessagingException;
-import javax.mail.Session;
-import javax.mail.Transport;
-import javax.mail.internet.InternetAddress;
-import javax.mail.internet.MimeMessage;
+import java.util.stream.Collectors;
 
 import com.epam.vitebsk.dao.MessageDao;
 import com.epam.vitebsk.dao.UserDao;
@@ -48,42 +41,6 @@ public class MessageService extends EntityService<Long, Message> {
     	return messages;
     }
 
-    public void send(Message message) {
-        save(message);
-        String to = message.getRecipient().getUsername();
-        String from = message.getSender().getUsername();
-        String host = "localhost";
-        int port = 25;
-        
-        Properties properties = new Properties();
-        properties.put("mail.smtp.host", host);
-        properties.put("mail.smtp.port", port);
-        properties.put("mail.smtp.auth", "false");
-        properties.put("mail.debug", "true");
-        
-        Session session = Session.getDefaultInstance(properties);
-        
-        javax.mail.Message msg = new MimeMessage(session);
-        
-        try {
-			msg.setFrom(new InternetAddress(from));
-			InternetAddress [] address = {new InternetAddress(to)};
-			msg.setRecipients(javax.mail.Message.RecipientType.TO, address);
-			msg.setSubject(message.getSubject());
-			msg.setSentDate(new Date());
-			
-			msg.setText(message.getMessage());
-			
-			Transport.send(msg);
-		} catch (MessagingException e) {
-			e.printStackTrace();
-		}
-    }
-    
-    public void receive() {
-        
-    }
-
     @Override
     public void save(Message message) {
         User recipient = userDao.readByUsername(message.getRecipient().getUsername());
@@ -114,23 +71,10 @@ public class MessageService extends EntityService<Long, Message> {
         List<Message> sentMessages = dao.readBySenderId(id);
         
         Set<Long> userIds = new TreeSet<Long>();
-        Set<String> usernames = new TreeSet<String>();
         
-        for (Message message : receivedMessages) {
-            Long userId = message.getSender().getId();
-            userIds.add(userId);
-        }
+        receivedMessages.forEach(i -> userIds.add(i.getSender().getId()));
+        sentMessages.forEach(i -> userIds.add(i.getRecipient().getId()));
         
-        for (Message message : sentMessages) {
-            Long userId = message.getRecipient().getId();
-            userIds.add(userId);
-        }
-        
-        for (Long userId : userIds) {
-            User user = userDao.read(userId);
-            usernames.add(user.getUsername());
-        }
-        
-        return usernames;
+        return userIds.stream().map(i -> userDao.read(i).getUsername()).collect(Collectors.toCollection(TreeSet::new));
     }
 }

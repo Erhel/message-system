@@ -27,12 +27,6 @@
 	<nav class="navbar navbar-expand-lg navbar-light bg-light">
 		<span class="navbar-brand">Mail</span>
   		<div class="collapse navbar-collapse justify-content-end" id="myNavbar">
-			<c:if test="${not empty param.msg}">
-                <span class="navbar-text pr-4">${param.msg}</span>
-			</c:if>
-            <c:if test="${not empty error}">
-                <span class="navbar-text pr-4">${error}</span>
-            </c:if>
 			<c:if test="${not empty user}">
 				<c:url var="urlLogout" value="/authorization/logout.html"/>
 				<span class="navbar-brand">${user.displayName}</span>
@@ -42,6 +36,18 @@
 			</c:if>
 		</div>
 	</nav>
+    <c:if test="${not empty param.info}">
+        <div class="alert col-4 mx-auto mt-4 alert-info alert-dismissible fade show">
+		   <button type="button" class="close" data-dismiss="alert">&times;</button>
+		   <strong>Info!</strong> ${param.info}
+		 </div>
+    </c:if>
+    <c:if test="${not empty param.success}">
+        <div class="alert col-4 mx-auto mt-4 alert-success alert-dismissible fade show">
+           <button type="button" class="close" data-dismiss="alert">&times;</button>
+           <strong>Success!</strong> ${param.success}
+         </div>
+    </c:if>
 	<jsp:doBody />
 </body>
 </html>

@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.epam.vitebsk.dao.DAOFactory;
 import com.epam.vitebsk.dao.jdbc.pool.ConnectionPool;
+import com.epam.vitebsk.service.MailService;
 import com.epam.vitebsk.service.ServiceFactory;
 
 public class ServletDispatcher extends HttpServlet {
@@ -29,10 +30,13 @@ public class ServletDispatcher extends HttpServlet {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-
+		
 		DAOFactory daoFactory = new DAOFactory(connectionPool);
 
 		serviceFactory = new ServiceFactory(daoFactory);
+		
+		MailService mailService = new MailService("localhost", "25", "message-service@company.com", "password");
+		serviceFactory.setMailService(mailService);
 	}
 
 	@Override
@@ -65,9 +69,6 @@ public class ServletDispatcher extends HttpServlet {
 		if (response!=null && response.isRedirect()) {
 			resp.sendRedirect(context + response.getUrl());
 		} else {
-			if (response!=null && response.getUrl()!=null) {
-				url = response.getUrl();
-			}
 			req.getRequestDispatcher("/WEB-INF/jsp" + url + ".jsp").forward(req, resp);
 		}
 	}

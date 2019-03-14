@@ -5,6 +5,7 @@ import com.epam.vitebsk.dao.DAOFactory;
 public class ServiceFactory {
 
 	private DAOFactory daoFactory;
+	private MailService mailService;
 	
 	public UserService getUserService() {
 	    
@@ -24,8 +25,16 @@ public class ServiceFactory {
         
         return service;
 	}
-
+	
 	public ServiceFactory(DAOFactory daoFactory) {
 		this.daoFactory = daoFactory;
+	}
+
+	public MailService getMailService() {
+		return mailService;
+	}
+
+	public void setMailService(MailService mailService) {
+		this.mailService = mailService;
 	}
 }
