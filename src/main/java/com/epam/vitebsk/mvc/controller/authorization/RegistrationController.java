@@ -8,7 +8,7 @@ import com.epam.vitebsk.mvc.Controller;
 import com.epam.vitebsk.mvc.Response;
 import com.epam.vitebsk.service.ServiceFactory;
 
-public class RegistrationController extends Encrypter implements Controller {
+public class RegistrationController implements Controller {
 
 	@Override
 	public Response handle(HttpServletRequest req, HttpServletResponse resp, ServiceFactory serviceFactory) {
