@@ -10,6 +10,7 @@ import com.epam.vitebsk.mvc.Response;
 import com.epam.vitebsk.service.MailService;
 import com.epam.vitebsk.service.MessageService;
 import com.epam.vitebsk.service.ServiceFactory;
+import com.epam.vitebsk.service.UserService;
 
 public class MessageSendController extends MessageSupport implements Controller {
 
@@ -38,7 +39,16 @@ public class MessageSendController extends MessageSupport implements Controller 
                 return new Response("/message/edit.html?info=text of message should've less than 1024 symbols");
             }
 
-            MessageService messageService = serviceFactory.getMessageService();
+            UserService userService = serviceFactory.getUserService();
+            
+            if (userService.findByUsername(username)==null) {
+                session = req.getSession(false);
+                session.setAttribute("message", message);
+                return new Response("/message/edit.html?info=such user doesn't exists");
+            }
+            
+            MessageService messageService = serviceFactory.getMessageService();     
+                        
             messageService.save(message);
             MailService mailService = serviceFactory.getMailService();
             new Thread(() -> mailService.send(message)).start();

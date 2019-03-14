@@ -13,4 +13,12 @@ public class UserService extends EntityService<Long, User> {
         
         return user;
     }
+
+    public User findByUsername(String username) {
+        UserDao dao = getDao();
+        
+        User user = dao.readByUsername(username);
+        
+        return user;
+    }
 }
