@@ -69,9 +69,6 @@ public class ServletDispatcher extends HttpServlet {
 		if (response!=null && response.isRedirect()) {
 			resp.sendRedirect(context + response.getUrl());
 		} else {
-			if (response!=null && response.getUrl()!=null) {
-				url = response.getUrl();
-			}
 			req.getRequestDispatcher("/WEB-INF/jsp" + url + ".jsp").forward(req, resp);
 		}
 	}

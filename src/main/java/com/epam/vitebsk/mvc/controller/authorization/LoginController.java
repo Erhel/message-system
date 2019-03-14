@@ -9,7 +9,7 @@ import com.epam.vitebsk.mvc.Controller;
 import com.epam.vitebsk.mvc.Response;
 import com.epam.vitebsk.service.ServiceFactory;
 
-public class LoginController implements Controller {
+public class LoginController extends Decrypter implements Controller {
 
     @Override
     public Response handle(HttpServletRequest req, HttpServletResponse resp, ServiceFactory serviceFactory) {
@@ -23,7 +23,10 @@ public class LoginController implements Controller {
                 return new Response("/authorization/login.html?info=password should've at least 6 symbols");
             }
             
-            User user = serviceFactory.getUserService().findByLoginAndPassword(login, password);
+            String hashPassword = Decrypter.toHashPassword(password, login);
+            
+            User user = serviceFactory.getUserService().findByLoginAndPassword(login, hashPassword);
+            
             if (user != null) {
 
                 HttpSession oldSession = req.getSession(false);

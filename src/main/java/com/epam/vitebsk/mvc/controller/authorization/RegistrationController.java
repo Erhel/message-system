@@ -8,7 +8,7 @@ import com.epam.vitebsk.mvc.Controller;
 import com.epam.vitebsk.mvc.Response;
 import com.epam.vitebsk.service.ServiceFactory;
 
-public class RegistrationController implements Controller {
+public class RegistrationController extends Decrypter implements Controller {
 
 	@Override
 	public Response handle(HttpServletRequest req, HttpServletResponse resp, ServiceFactory serviceFactory) {
@@ -40,7 +40,9 @@ public class RegistrationController implements Controller {
 		        return new Response("/authorization/registration.html?info=password and confirm password are not matched");
 		    }
 			
-			User user = new User(null, username, password, displayName);
+		    String hashPassword = Decrypter.toHashPassword(password, username);
+		    
+			User user = new User(null, username, hashPassword, displayName);
 			serviceFactory.getUserService().save(user);
 			
 			return new Response("/authorization/login.html?success=you are successfully registered");

@@ -3,6 +3,7 @@ package com.epam.vitebsk.service;
 import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
+import java.util.stream.Collectors;
 
 import com.epam.vitebsk.dao.MessageDao;
 import com.epam.vitebsk.dao.UserDao;
@@ -70,23 +71,10 @@ public class MessageService extends EntityService<Long, Message> {
         List<Message> sentMessages = dao.readBySenderId(id);
         
         Set<Long> userIds = new TreeSet<Long>();
-        Set<String> usernames = new TreeSet<String>();
         
-        for (Message message : receivedMessages) {
-            Long userId = message.getSender().getId();
-            userIds.add(userId);
-        }
+        receivedMessages.forEach(i -> userIds.add(i.getSender().getId()));
+        sentMessages.forEach(i -> userIds.add(i.getRecipient().getId()));
         
-        for (Message message : sentMessages) {
-            Long userId = message.getRecipient().getId();
-            userIds.add(userId);
-        }
-        
-        for (Long userId : userIds) {
-            User user = userDao.read(userId);
-            usernames.add(user.getUsername());
-        }
-        
-        return usernames;
+        return userIds.stream().map(i -> userDao.read(i).getUsername()).collect(Collectors.toCollection(TreeSet::new));
     }
 }
