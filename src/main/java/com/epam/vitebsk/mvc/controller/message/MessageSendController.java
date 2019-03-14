@@ -1,4 +1,4 @@
-package com.epam.vitebsk.mvc.action.message;
+package com.epam.vitebsk.mvc.controller.message;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -8,6 +8,7 @@ import com.epam.vitebsk.entity.Message;
 import com.epam.vitebsk.mvc.Controller;
 import com.epam.vitebsk.mvc.Response;
 import com.epam.vitebsk.service.MailService;
+import com.epam.vitebsk.service.MessageService;
 import com.epam.vitebsk.service.ServiceFactory;
 
 public class MessageSendController extends MessageSupport implements Controller {
@@ -28,17 +29,19 @@ public class MessageSendController extends MessageSupport implements Controller 
             if (subject.length() > 256) {
                 session = req.getSession(false);
                 session.setAttribute("message", message);
-                return new Response("/message/edit.html?msg=subject should've less than 256 symbols");
+                return new Response("/message/edit.html?info=subject should've less than 256 symbols");
             }
 
             if (msg.length() > 1024) {
                 session = req.getSession(false);
                 session.setAttribute("message", message);
-                return new Response("/message/edit.html?msg=text of message should've less than 1024 symbols");
+                return new Response("/message/edit.html?info=text of message should've less than 1024 symbols");
             }
 
+            MessageService messageService = serviceFactory.getMessageService();
+            messageService.save(message);
             MailService mailService = serviceFactory.getMailService();
-            mailService.send(message);
+            new Thread(() -> mailService.send(message)).start();
         }
 
         return new Response("/message/list.html");

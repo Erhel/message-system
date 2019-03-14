@@ -4,7 +4,7 @@
 
 <u:navigation-bar title="Login">
 	<div class="container">
-		<div class="d-flex align-items-center" style="height: 100vh">
+		<div class="d-flex align-items-center" style="height: 90vh">
 			<div class="col-4 mx-auto">
 				<div class="card">
 					<div class="card-header">

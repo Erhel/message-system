@@ -1,4 +1,4 @@
-package com.epam.vitebsk.mvc.action.authorization;
+package com.epam.vitebsk.mvc.controller.authorization;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -20,7 +20,7 @@ public class LoginController implements Controller {
         if (login != null && password != null) {
             
             if (password.length() < 6) {
-                return new Response("/authorization/login.html?msg=password should've at least 6 symbols");
+                return new Response("/authorization/login.html?info=password should've at least 6 symbols");
             }
             
             User user = serviceFactory.getUserService().findByLoginAndPassword(login, password);
@@ -36,7 +36,7 @@ public class LoginController implements Controller {
                 session.setAttribute("user", user);
                 return new Response("/message/list.html");
             } else {
-                return new Response("/authorization/login.html?msg=incorrect password or login");
+                return new Response("/authorization/login.html?info=incorrect password or login");
             }
         }        
         return null;

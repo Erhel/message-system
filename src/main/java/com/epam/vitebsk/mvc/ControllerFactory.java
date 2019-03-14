@@ -5,13 +5,12 @@ import java.util.Map;
 
 import javax.servlet.ServletException;
 
-import com.epam.vitebsk.mvc.action.authorization.LoginController;
-import com.epam.vitebsk.mvc.action.authorization.LogoutController;
-import com.epam.vitebsk.mvc.action.authorization.RegistrationController;
-import com.epam.vitebsk.mvc.action.message.MessageEditController;
-import com.epam.vitebsk.mvc.action.message.MessageListController;
-import com.epam.vitebsk.mvc.action.message.MessageSaveController;
-import com.epam.vitebsk.mvc.action.message.MessageSendController;
+import com.epam.vitebsk.mvc.controller.authorization.LoginController;
+import com.epam.vitebsk.mvc.controller.authorization.LogoutController;
+import com.epam.vitebsk.mvc.controller.authorization.RegistrationController;
+import com.epam.vitebsk.mvc.controller.message.MessageEditController;
+import com.epam.vitebsk.mvc.controller.message.MessageListController;
+import com.epam.vitebsk.mvc.controller.message.MessageSendController;
 
 public class ControllerFactory {
 	
@@ -23,7 +22,6 @@ public class ControllerFactory {
 		controllers.put("/authorization/registration", RegistrationController.class);
 		controllers.put("/message/list", MessageListController.class);
 		controllers.put("/message/edit", MessageEditController.class);
-		controllers.put("/message/save", MessageSaveController.class);
 		controllers.put("/message/send", MessageSendController.class);
 	}
 	

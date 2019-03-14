@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.epam.vitebsk.dao.DAOFactory;
 import com.epam.vitebsk.dao.jdbc.pool.ConnectionPool;
+import com.epam.vitebsk.service.MailService;
 import com.epam.vitebsk.service.ServiceFactory;
 
 public class ServletDispatcher extends HttpServlet {
@@ -33,6 +34,9 @@ public class ServletDispatcher extends HttpServlet {
 		DAOFactory daoFactory = new DAOFactory(connectionPool);
 
 		serviceFactory = new ServiceFactory(daoFactory);
+		
+		MailService mailService = new MailService("localhost", "25", "message-service@company.com", "password");
+		serviceFactory.setMailService(mailService);
 	}
 
 	@Override

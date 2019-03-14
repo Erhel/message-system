@@ -31,11 +31,8 @@
 		</form>
         <div class="text-right">
             <c:if test="${empty message.id}">
-                <c:url var="href" value="/message/save.html"/>
-                <button type="submit" formmethod="post" formaction="${href}" form="saveForm" onclick="closeTab()" class="btn btn-primary">Save</button>
-                
                 <c:url var="urlSendMessage" value="/message/send.html"/>
-    			<button type="submit" formmethod="post" formaction="${urlSendMessage}" form="saveForm" onclick="closeTab()" class="btn btn-primary">Send</button>
+    			<button type="submit" formmethod="post" formaction="${urlSendMessage}" form="saveForm" class="btn btn-primary">Send</button>
             </c:if>
             <c:url var="urlBack" value="/message/list.html"/><a href="${urlBack}" onclick="closeTab()" class="btn btn-primary">Back</a>
         </div>

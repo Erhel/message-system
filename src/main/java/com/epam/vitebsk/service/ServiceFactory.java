@@ -25,12 +25,16 @@ public class ServiceFactory {
         
         return service;
 	}
-
-	public MailService getMailService() {
-	    return new MailService();
-	}
 	
 	public ServiceFactory(DAOFactory daoFactory) {
 		this.daoFactory = daoFactory;
+	}
+
+	public MailService getMailService() {
+		return mailService;
+	}
+
+	public void setMailService(MailService mailService) {
+		this.mailService = mailService;
 	}
 }

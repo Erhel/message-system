@@ -1,4 +1,4 @@
-package com.epam.vitebsk.mvc.action.authorization;
+package com.epam.vitebsk.mvc.controller.authorization;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;

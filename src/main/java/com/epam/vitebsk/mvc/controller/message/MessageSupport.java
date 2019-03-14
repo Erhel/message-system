@@ -1,4 +1,4 @@
-package com.epam.vitebsk.mvc.action.message;
+package com.epam.vitebsk.mvc.controller.message;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
