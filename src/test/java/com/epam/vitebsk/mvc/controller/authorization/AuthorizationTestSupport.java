@@ -14,7 +14,6 @@ public class AuthorizationTestSupport extends ControllerTest {
     @Before
     public void setUp() {
         super.setUp();
-        when(factory.getUserService()).thenReturn(service);
+        when(serviceFactory.getUserService()).thenReturn(service);
     }
-       
 }

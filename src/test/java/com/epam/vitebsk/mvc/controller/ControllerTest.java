@@ -26,10 +26,11 @@ public class ControllerTest extends Mockito {
     protected HttpServletResponse resp;
     
     @Mock
-    protected ServiceFactory factory;
+    protected ServiceFactory serviceFactory;
 
     @Before
     public void setUp() {
         MockitoAnnotations.initMocks(this);
+        when(req.getSession(anyBoolean())).thenReturn(session);
     }
 }

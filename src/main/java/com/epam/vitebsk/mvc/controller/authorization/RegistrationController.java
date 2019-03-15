@@ -7,6 +7,7 @@ import com.epam.vitebsk.entity.User;
 import com.epam.vitebsk.mvc.Controller;
 import com.epam.vitebsk.mvc.Response;
 import com.epam.vitebsk.service.ServiceFactory;
+import com.epam.vitebsk.service.UserService;
 
 public class RegistrationController implements Controller {
 
@@ -43,7 +44,8 @@ public class RegistrationController implements Controller {
 		    String hashPassword = Encrypter.toHashPassword(password, username);
 		    
 			User user = new User(null, username, hashPassword, displayName);
-			serviceFactory.getUserService().save(user);
+			UserService service = serviceFactory.getUserService();
+			service.save(user);
 			
 			return new Response("/authorization/login.html?success=you are successfully registered");
 		}
