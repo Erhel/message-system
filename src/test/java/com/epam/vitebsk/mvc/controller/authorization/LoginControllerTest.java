@@ -10,17 +10,22 @@ import com.epam.vitebsk.mvc.Response;
 
 public class LoginControllerTest extends AuthorizationTestSupport  {
     
+	private String username;
+	private String password;
+	
 	@Before
 	public void setUp() {
 		super.setUp();
 		controller = new LoginController();
+		username = "andrey.koval@mail.ru";
+		password = "simple";
 	}
 	
     @Test
     public void test1() {
-        when(req.getParameter("login")).thenReturn("andrey.koval@mail.ru");
-        when(req.getParameter("password")).thenReturn("simple");
-        when(service.findByLoginAndPassword(anyString(), anyString())).thenReturn(new User(1L, "andrey.koval@mail.ru", "simple", "Andrey"));
+        when(req.getParameter("login")).thenReturn(username);
+        when(req.getParameter("password")).thenReturn(password);
+        when(service.findByLoginAndPassword(anyString(), anyString())).thenReturn(new User(1L, username, password, "Andrey"));
         
         Response response = controller.handle(req, resp, serviceFactory);
         
@@ -32,8 +37,8 @@ public class LoginControllerTest extends AuthorizationTestSupport  {
     
     @Test
     public void test2() {
-    	when(req.getParameter("login")).thenReturn(null).thenReturn("andrey.koval@mail.ru");
-    	when(req.getParameter("password")).thenReturn("simple").thenReturn(null);
+    	when(req.getParameter("login")).thenReturn(null).thenReturn(username);
+    	when(req.getParameter("password")).thenReturn(password).thenReturn(null);
     	
     	Response response = controller.handle(req, resp, serviceFactory);
     	
@@ -49,7 +54,7 @@ public class LoginControllerTest extends AuthorizationTestSupport  {
     
     @Test
     public void test3() {
-    	when(req.getParameter("login")).thenReturn("andrey.koval@mail.ru");
+    	when(req.getParameter("login")).thenReturn(username);
         when(req.getParameter("password")).thenReturn("small");
         
         Response response = controller.handle(req, resp, serviceFactory);
@@ -62,8 +67,8 @@ public class LoginControllerTest extends AuthorizationTestSupport  {
     
     @Test
     public void test4() {
-    	when(req.getParameter("login")).thenReturn("andrey.koval@mail.ru");
-        when(req.getParameter("password")).thenReturn("simple");
+    	when(req.getParameter("login")).thenReturn(username);
+        when(req.getParameter("password")).thenReturn(password);
         when(service.findByLoginAndPassword(anyString(), anyString())).thenReturn(null);
         
         Response response = controller.handle(req, resp, serviceFactory);

@@ -20,18 +20,16 @@ public class MessageListController implements Controller {
 
 		HttpSession session = req.getSession(false);
 		User user = (User) session.getAttribute("user");
-		if (user!=null && user.getId()!=null) {
 			
-			MessageService service = serviceFactory.getMessageService();
-			Long id = user.getId();
-			
-			List<Message> receivedMessages = service.findMessagesByRecipientId(id);
-			List<Message> sentMessages = service.findMessagesBySenderId(id);
-			
-			req.setAttribute("receivedMessages", receivedMessages);
-			req.setAttribute("sentMessages", sentMessages);
-		}
+		MessageService service = serviceFactory.getMessageService();
+		Long id = user.getId();
 		
+		List<Message> receivedMessages = service.findMessagesByRecipientId(id);
+		List<Message> sentMessages = service.findMessagesBySenderId(id);
+		
+		req.setAttribute("receivedMessages", receivedMessages);
+		req.setAttribute("sentMessages", sentMessages);
+
 		return null;
 	}
 }

@@ -14,20 +14,23 @@ import com.epam.vitebsk.mvc.Response;
 
 public class MessageEditControllerTest extends MessageTestSupport {
 
-	private User user = new User(1L, "andrey.koval@mail.ru", "simple", "Andrey");
-	private Set<String> usernames = new TreeSet<String>() {{add("mike.lohan@mail.ru"); add("tim.johans@mail.ru");}};
-	private Message message = new Message(1L, "test", "mess", user, new User(2L, "mike.lohan@mail.ru", null , null));
+	private User user;
+	private Set<String> usernames;
+	private Message message;
 	
 	@Before
 	public void setUp() {
 		super.setUp();
 		controller = new MessageEditController();
+		user = new User(1L, "andrey.koval@mail.ru", "simple", "Andrey");
+		usernames = new TreeSet<String>() {{add("mike.lohan@mail.ru"); add("tim.johans@mail.ru");}};
+		message = new Message(1L, "test", "mess", user, new User(2L, "mike.lohan@mail.ru", null , null));
+		when(session.getAttribute("user")).thenReturn(user);
 	}
 
 	@Test
 	public void test1() {
 		when(req.getParameter("id")).thenReturn(null);
-		when(session.getAttribute("user")).thenReturn(user);
 		when(session.getAttribute("message")).thenReturn(null);
 		when(messageService.findUsernamesByUserId(anyLong())).thenReturn(usernames);
 		
@@ -43,7 +46,6 @@ public class MessageEditControllerTest extends MessageTestSupport {
 	@Test
 	public void test2() {
 		when(req.getParameter("id")).thenReturn(null);
-		when(session.getAttribute("user")).thenReturn(user);
 		when(session.getAttribute("message")).thenReturn(message);
 		when(messageService.findUsernamesByUserId(anyLong())).thenReturn(usernames);
 		
@@ -60,7 +62,6 @@ public class MessageEditControllerTest extends MessageTestSupport {
 	@Test
 	public void test3() {
 		when(req.getParameter("id")).thenReturn(message.getId().toString());
-		when(session.getAttribute("user")).thenReturn(user);
 		when(messageService.findUsernamesByUserId(anyLong())).thenReturn(usernames);
 		when(messageService.find(anyLong())).thenReturn(message);
 		
@@ -77,7 +78,6 @@ public class MessageEditControllerTest extends MessageTestSupport {
 	@Test
 	public void test4() {
 		when(req.getParameter("id")).thenReturn("222");
-		when(session.getAttribute("user")).thenReturn(user);
 		when(messageService.findUsernamesByUserId(anyLong())).thenReturn(usernames);
 		when(messageService.find(anyLong())).thenReturn(new Message(222L, "", "", new User(2L, "", "", ""), new User(3L, "", "", "")));
 		
