@@ -14,39 +14,40 @@ public class LoginController implements Controller {
 
     @Override
     public Response handle(HttpServletRequest req, HttpServletResponse resp, ServiceFactory serviceFactory) {
-        
+
         String login = req.getParameter("login");
         String password = req.getParameter("password");
-        
-        if (login != null && password != null) {
-            
-            if (password.length() < 6) {
-                return new Response("/authorization/login.html?info=password should've at least 6 symbols");
-            }
-            
-            String hashPassword = Encrypter.toHashPassword(password, login);
-            
-            UserService service = serviceFactory.getUserService();
-            
-            User user = service.findByLoginAndPassword(login, hashPassword);
-            
-            if (user != null) {
 
-                HttpSession oldSession = req.getSession(false);
+        if (login == null || password == null) {
+            return null;
+        }
                 
-                if (oldSession!=null) {
-                    oldSession.invalidate();
-                }
+        HttpSession session = req.getSession(false);
+        
+        if (session!=null) {
+            session.invalidate();
+            session = req.getSession(true);
+        }
 
-                HttpSession session = req.getSession(true);
-                session.setAttribute("user", user);
-                return new Response("/message/list.html");
-            } else {
-                return new Response("/authorization/login.html?info=incorrect password or login");
-            }
-        }        
-        return null;
+        if (password.length() < 6) {
+            session.setAttribute("info", "password should've at least 6 symbols");
+            return new Response("/authorization/login.html");
+        }
+
+        String hashPassword = Encrypter.toHashPassword(password, login);
+
+        UserService service = serviceFactory.getUserService();
+
+        User user = service.findByLoginAndPassword(login, hashPassword);
+
+        if (user == null) {
+            session.setAttribute("info", "incorrect password or login");
+            return new Response("/authorization/login.html");
+        }
+
+        
+        session.setAttribute("user", user);
+        return new Response("/message/list.html");
     }
-    
-    
+
 }

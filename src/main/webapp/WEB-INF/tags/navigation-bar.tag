@@ -36,16 +36,16 @@
 			</c:if>
 		</div>
 	</nav>
-    <c:if test="${not empty param.info}">
+    <c:if test="${not empty info}">
         <div class="alert col-4 mx-auto mt-4 alert-info alert-dismissible fade show">
 		   <button type="button" class="close" data-dismiss="alert">&times;</button>
-		   <strong>Info!</strong> ${param.info}
+		   <strong>Info!</strong> ${info}
 		 </div>
     </c:if>
-    <c:if test="${not empty param.success}">
+    <c:if test="${not empty success}">
         <div class="alert col-4 mx-auto mt-4 alert-success alert-dismissible fade show">
            <button type="button" class="close" data-dismiss="alert">&times;</button>
-           <strong>Success!</strong> ${param.success}
+           <strong>Success!</strong> ${success}
          </div>
     </c:if>
 	<jsp:doBody />

@@ -1,4 +1,4 @@
-package com.epam.vitebsk.mvc.controller.message;
+package com.epam.vitebsk.tests.mvc.controller.message;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -11,6 +11,7 @@ import org.mockito.Mock;
 import com.epam.vitebsk.entity.Message;
 import com.epam.vitebsk.entity.User;
 import com.epam.vitebsk.mvc.Response;
+import com.epam.vitebsk.mvc.controller.message.MessageSendController;
 import com.epam.vitebsk.service.MailService;
 import com.epam.vitebsk.service.UserService;
 
@@ -82,7 +83,7 @@ public class MessageSendControllerTest extends MessageTestSupport {
 		
 		verify(session, times(1)).setAttribute(eq("message"), any(Message.class));
 		
-		assertThat(response).isEqualToComparingFieldByField(new Response("/message/edit.html?info=subject should've less than 256 symbols"));
+		assertThat(response).isEqualToComparingFieldByField(new Response("/message/edit.html"));
 	}
 	
 	@Ignore
@@ -97,7 +98,7 @@ public class MessageSendControllerTest extends MessageTestSupport {
 		
 		verify(session, times(1)).setAttribute(eq("message"), any(Message.class));
 		
-		assertThat(response).isEqualToComparingFieldByField(new Response("/message/edit.html?info=such user doesn't exists"));
+		assertThat(response).isEqualToComparingFieldByField(new Response("/message/edit.htmls"));
 	}
 	
 	@Ignore

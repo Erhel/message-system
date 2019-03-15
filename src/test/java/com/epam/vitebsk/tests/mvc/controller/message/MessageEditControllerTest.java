@@ -1,16 +1,18 @@
-package com.epam.vitebsk.mvc.controller.message;
+package com.epam.vitebsk.tests.mvc.controller.message;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.Set;
 import java.util.TreeSet;
 
+import org.assertj.core.util.Arrays;
 import org.junit.Before;
 import org.junit.Test;
 
 import com.epam.vitebsk.entity.Message;
 import com.epam.vitebsk.entity.User;
 import com.epam.vitebsk.mvc.Response;
+import com.epam.vitebsk.mvc.controller.message.MessageEditController;
 
 public class MessageEditControllerTest extends MessageTestSupport {
 
@@ -18,13 +20,15 @@ public class MessageEditControllerTest extends MessageTestSupport {
 	private Set<String> usernames;
 	private Message message;
 	
+	private static Long USER1_ID = 1L;
+
 	@Before
 	public void setUp() {
 		super.setUp();
 		controller = new MessageEditController();
 		user = new User(1L, "andrey.koval@mail.ru", "simple", "Andrey");
-		usernames = new TreeSet<String>() {{add("mike.lohan@mail.ru"); add("tim.johans@mail.ru");}};
-		message = new Message(1L, "test", "mess", user, new User(2L, "mike.lohan@mail.ru", null , null));
+		usernames = new TreeSet<String>(Arrays.nonNullElementsIn(Arrays.array("mike.lohan@mail.ru", "tim.johans@mail.ru")));
+		message = new Message(USER1_ID, "test", "mess", user, new User(2L, "mike.lohan@mail.ru", null , null));
 		when(session.getAttribute("user")).thenReturn(user);
 	}
 

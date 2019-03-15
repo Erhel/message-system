@@ -88,18 +88,17 @@ public class ConnectionPool {
           
         if (user!=null && pass!=null) {
             con = DriverManager.getConnection(url, user, pass);
-        }
-        else {
+        } else {
             con = DriverManager.getConnection(url);
         }
 
         pcon = new PooledConnection(this, con);
         getLogger().info("Created a new connection");
-
       } catch (SQLException e) {
-          getLogger().error("Can't create a new connection for {}", url, e);
-        try {if (con != null) con.close();} catch (SQLException e2) {getLogger().error("Unable to close connection", e2);}
+        getLogger().error("Can't create a new connection for {}", url, e);
         throw e;
+      } finally {
+          try {if (con != null) con.close();} catch (SQLException e2) {getLogger().error("Unable to close connection", e2);}  
       }
 
       return pcon;

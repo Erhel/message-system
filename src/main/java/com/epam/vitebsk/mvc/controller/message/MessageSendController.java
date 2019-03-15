@@ -21,30 +21,32 @@ public class MessageSendController extends MessageSupport implements Controller 
         String subject = req.getParameter("subject");
         String msg = req.getParameter("message");
 
+        HttpSession session = req.getSession(false);
+        session.setAttribute("info", null);
+        
         if (username != null && subject != null && msg != null) {
-
-            HttpSession session = null;
 
             Message message = buildMessage(req);
 
             if (subject.length() > 256) {
-                session = req.getSession(false);
+
                 session.setAttribute("message", message);
-                return new Response("/message/edit.html?info=subject should've less than 256 symbols");
+                session.setAttribute("info", "subject should've less than 256 symbols");
+                return new Response("/message/edit.html");
             }
 
             if (msg.length() > 1024) {
-                session = req.getSession(false);
                 session.setAttribute("message", message);
-                return new Response("/message/edit.html?info=text of message should've less than 1024 symbols");
+                session.setAttribute("info", "text of message should've less than 1024 symbols");
+                return new Response("/message/edit.html");
             }
 
             UserService userService = serviceFactory.getUserService();
             
             if (userService.findByUsername(username)==null) {
-                session = req.getSession(false);
                 session.setAttribute("message", message);
-                return new Response("/message/edit.html?info=such user doesn't exists");
+                session.setAttribute("info", "such user doesn't exists");
+                return new Response("/message/edit.html");
             }
             
             MessageService messageService = serviceFactory.getMessageService();     

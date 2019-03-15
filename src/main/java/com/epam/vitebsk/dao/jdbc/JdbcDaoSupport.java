@@ -47,7 +47,7 @@ public abstract class JdbcDaoSupport {
         }
     }
 
-    protected <T> T selectOne(final String sql, final Mapper<T> mapper, Object... params) {
+    public <T> T selectOne(final String sql, final Mapper<T> mapper, Object... params) {
 
         PreparedStatement pst = null;
 
@@ -74,7 +74,7 @@ public abstract class JdbcDaoSupport {
         }
     }
 
-    protected <T> List<T> selectList(final String sql, final Mapper<T> mapper, Object... params) {
+    public <T> List<T> selectList(final String sql, final Mapper<T> mapper, Object... params) {
 
         PreparedStatement pst = null;
         
@@ -104,7 +104,7 @@ public abstract class JdbcDaoSupport {
         }
     }
 
-    protected void update(final String sql, Object... params) {
+    public void update(final String sql, Object... params) {
     	
     	PreparedStatement pst = null;
 
@@ -121,7 +121,7 @@ public abstract class JdbcDaoSupport {
         }
     }
 
-    public String getSql(String name) {
+    protected String getSql(String name) {
         Objects.requireNonNull(name);
         
         return map.get(name);

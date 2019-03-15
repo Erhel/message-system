@@ -1,4 +1,4 @@
-package com.epam.vitebsk.mvc.controller.authorization;
+package com.epam.vitebsk.tests.mvc.controller.authorization;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -7,6 +7,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import com.epam.vitebsk.mvc.Response;
+import com.epam.vitebsk.mvc.controller.authorization.RegistrationController;
 
 public class RegistrationControllerTest extends AuthorizationTestSupport {
 
@@ -89,7 +90,8 @@ public class RegistrationControllerTest extends AuthorizationTestSupport {
 		when(req.getParameter("confirm")).thenReturn("small");
 
 		Response response = controller.handle(req, resp, serviceFactory);
-		assertThat(response).isEqualToComparingFieldByField(new Response("/authorization/registration.html?info=password should've at least 6 symbols"));
+		
+		assertThat(response).isEqualToComparingFieldByField(new Response("/authorization/registration.html"));
 
 		verify(serviceFactory, never()).getUserService();
 		verify(service, never()).save(any());
@@ -104,7 +106,9 @@ public class RegistrationControllerTest extends AuthorizationTestSupport {
 		when(req.getParameter("confirm")).thenReturn(password);
 
 		Response response = controller.handle(req, resp, serviceFactory);
-		assertThat(response).isEqualToComparingFieldByField(new Response("/authorization/registration.html?info=password should've less than 128 symbols"));
+		
+
+		assertThat(response).isEqualToComparingFieldByField(new Response("/authorization/registration.html"));
 
 		verify(serviceFactory, never()).getUserService();
 		verify(service, never()).save(any());
@@ -118,7 +122,8 @@ public class RegistrationControllerTest extends AuthorizationTestSupport {
 		when(req.getParameter("confirm")).thenReturn(password);
 
 		Response response = controller.handle(req, resp, serviceFactory);
-		assertThat(response).isEqualToComparingFieldByField(new Response("/authorization/registration.html?info=nickname should've less than 128 symbols"));
+		
+		assertThat(response).isEqualToComparingFieldByField(new Response("/authorization/registration.html"));
 
 		verify(serviceFactory, never()).getUserService();
 		verify(service, never()).save(any());
@@ -132,7 +137,8 @@ public class RegistrationControllerTest extends AuthorizationTestSupport {
 		when(req.getParameter("confirm")).thenReturn(password);
 
 		Response response = controller.handle(req, resp, serviceFactory);
-		assertThat(response).isEqualToComparingFieldByField(new Response("/authorization/registration.html?info=email should've less than 256 symbols"));
+		
+		assertThat(response).isEqualToComparingFieldByField(new Response("/authorization/registration.html"));
 
 		verify(serviceFactory, never()).getUserService();
 		verify(service, never()).save(any());
@@ -146,7 +152,8 @@ public class RegistrationControllerTest extends AuthorizationTestSupport {
 		when(req.getParameter("confirm")).thenReturn("small");
 
 		Response response = controller.handle(req, resp, serviceFactory);
-		assertThat(response).isEqualToComparingFieldByField(new Response("/authorization/registration.html?info=password and confirm password are not matched"));
+		
+		assertThat(response).isEqualToComparingFieldByField(new Response("/authorization/registration.html"));
 
 		verify(serviceFactory, never()).getUserService();
 		verify(service, never()).save(any());
@@ -160,7 +167,8 @@ public class RegistrationControllerTest extends AuthorizationTestSupport {
 		when(req.getParameter("confirm")).thenReturn(password);
 
 		Response response = controller.handle(req, resp, serviceFactory);
-		assertThat(response).isEqualToComparingFieldByField(new Response("/authorization/login.html?success=you are successfully registered"));
+		
+		assertThat(response).isEqualToComparingFieldByField(new Response("/authorization/login.html"));
 
 		verify(serviceFactory, times(1)).getUserService();
 		verify(service, times(1)).save(any());

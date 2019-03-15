@@ -19,6 +19,7 @@ public class MessageListController implements Controller {
 	public Response handle(HttpServletRequest req, HttpServletResponse resp, ServiceFactory serviceFactory) {
 
 		HttpSession session = req.getSession(false);
+		session.setAttribute("info", null);
 		User user = (User) session.getAttribute("user");
 			
 		MessageService service = serviceFactory.getMessageService();

@@ -17,6 +17,7 @@ public class LogoutController implements Controller {
 		if (session!=null) {
 			session.invalidate();
 		}
+		
 		return new Response("/authorization/login.html");
 	}
 }

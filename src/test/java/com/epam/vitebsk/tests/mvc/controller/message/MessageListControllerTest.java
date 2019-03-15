@@ -1,17 +1,17 @@
-package com.epam.vitebsk.mvc.controller.message;
+package com.epam.vitebsk.tests.mvc.controller.message;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import org.junit.Before;
 import org.junit.Test;
 
-import java.util.List;
-import java.util.Arrays;
+import com.epam.vitebsk.entity.Message;
 import com.epam.vitebsk.entity.User;
 import com.epam.vitebsk.mvc.Response;
-import com.epam.vitebsk.entity.Message;
+import com.epam.vitebsk.mvc.controller.message.MessageListController;
 
 public class MessageListControllerTest extends MessageTestSupport {
 

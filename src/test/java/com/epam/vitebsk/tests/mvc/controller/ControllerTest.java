@@ -1,4 +1,4 @@
-package com.epam.vitebsk.mvc.controller;
+package com.epam.vitebsk.tests.mvc.controller;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;

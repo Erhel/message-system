@@ -1,4 +1,4 @@
-package com.epam.vitebsk.mvc.controller.authorization;
+package com.epam.vitebsk.tests.mvc.controller.authorization;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -7,6 +7,7 @@ import org.junit.Test;
 
 import com.epam.vitebsk.entity.User;
 import com.epam.vitebsk.mvc.Response;
+import com.epam.vitebsk.mvc.controller.authorization.LoginController;
 
 public class LoginControllerTest extends AuthorizationTestSupport  {
     
@@ -62,7 +63,7 @@ public class LoginControllerTest extends AuthorizationTestSupport  {
         verify(serviceFactory, never()).getUserService();
         verify(service, never()).findByLoginAndPassword(anyString(), anyString());
         
-        assertThat(response).isEqualToComparingFieldByField(new Response("/authorization/login.html?info=password should've at least 6 symbols"));
+        assertThat(response).isEqualToComparingFieldByField(new Response("/authorization/login.html"));
     }
     
     @Test
@@ -76,6 +77,6 @@ public class LoginControllerTest extends AuthorizationTestSupport  {
         verify(serviceFactory, times(1)).getUserService();
         verify(service, times(1)).findByLoginAndPassword(anyString(), anyString());
         
-        assertThat(response).isEqualToComparingFieldByField(new Response("/authorization/login.html?info=incorrect password or login"));
+        assertThat(response).isEqualToComparingFieldByField(new Response("/authorization/login.html"));
     }
 }
