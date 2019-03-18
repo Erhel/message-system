@@ -30,9 +30,13 @@ public class ControllerFactory {
 		Class<?> controller = controllers.get(url);
 		
 		try {
-			return (Controller) controller.newInstance();
+			return instasntiateController(controller);
 		} catch (InstantiationException | IllegalAccessException e) {
-			throw new ServletException(e);
+			throw new ServletException("Such URI doesn't exist.", e);
 		}
+	}
+	
+	public static Controller instasntiateController(Class<?> controller) throws InstantiationException, IllegalAccessException {
+		return (Controller) controller.newInstance();
 	}
 }

@@ -25,11 +25,11 @@ public abstract class JdbcDaoSupport {
         this.connection = connection;
     }
     
-    public void init(final String name) {
+    public void init(final String name) throws SQLException {
         try (InputStream io = getClass().getResourceAsStream(name)) {
             init(io);
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (IOException e) {
+            throw new SQLException(e);
         }
     }
     
@@ -62,7 +62,7 @@ public abstract class JdbcDaoSupport {
                 rs = pst.getResultSet();
                 if (rs.isBeforeFirst()) {                	
                 	rs.next();
-                	return mapper.map(rs);
+                	return apply(mapper, rs);
                 }
             }
             return null;
@@ -91,7 +91,7 @@ public abstract class JdbcDaoSupport {
                 rs = pst.getResultSet();
                 
                 while(rs.next()) {
-                    list.add(mapper.map(rs));
+                    list.add(apply(mapper, rs));
                 }
             }
 
@@ -109,21 +109,25 @@ public abstract class JdbcDaoSupport {
     	PreparedStatement pst = null;
 
         try {
-            pst = connection.prepareStatement(sql);
+        	pst = connection.prepareStatement(sql);
 
             buildQuery(pst, params);
             
             pst.executeUpdate();
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new RuntimeException(e);
         } finally {
             if (pst != null) try {pst.close();} catch (Exception e) {}
         }
     }
 
-    protected String getSql(String name) {
+    public String getSql(String name) {
         Objects.requireNonNull(name);
         
         return map.get(name);
     }
+    
+	public <T> T apply(Mapper<T> mapper, ResultSet rs) {
+		return mapper.map(rs);
+	}
 }

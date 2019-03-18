@@ -11,35 +11,38 @@ import com.epam.vitebsk.mvc.controller.authorization.LoginController;
 
 public class LoginControllerTest extends AuthorizationTestSupport  {
     
-	private String username;
-	private String password;
+	private User user;
 	
 	@Before
 	public void setUp() {
 		super.setUp();
 		controller = new LoginController();
-		username = "andrey.koval@mail.ru";
-		password = "simple";
+		user = new User(USER_ID, USERNAME, PASSWORD, DISPLAY_NAME);
+		
+		when(req.getSession(false)).thenReturn(null);
+		when(req.getSession()).thenReturn(session);
+		
+        when(req.getParameter(USERNAME_PARAMETR)).thenReturn(USERNAME);
+        when(req.getParameter(PASSWORD_PARAMETR)).thenReturn(PASSWORD);
 	}
 	
     @Test
-    public void test1() {
-        when(req.getParameter("login")).thenReturn(username);
-        when(req.getParameter("password")).thenReturn(password);
-        when(service.findByLoginAndPassword(anyString(), anyString())).thenReturn(new User(1L, username, password, "Andrey"));
+    public void successLogin() {
+        when(service.findByLoginAndPassword(anyString(), anyString())).thenReturn(user);
         
         Response response = controller.handle(req, resp, serviceFactory);
         
         verify(serviceFactory, times(1)).getUserService();
         verify(service, times(1)).findByLoginAndPassword(anyString(), anyString());
-        
-        assertThat(response).isEqualToComparingFieldByField(new Response("/message/list.html"));        
+        verify(session, times(1)).setAttribute(anyString(), eq(user));
+               
+        assertThat(response).isEqualToComparingFieldByField(new Response(TO_LIST_PAGE));        
     }
     
     @Test
-    public void test2() {
-    	when(req.getParameter("login")).thenReturn(null).thenReturn(username);
-    	when(req.getParameter("password")).thenReturn(password).thenReturn(null);
+    public void forwardToLoginPage() {
+    	doReturn(null).doReturn(USERNAME).when(req).getParameter(USERNAME_PARAMETR);
+    	doReturn(PASSWORD).doReturn(null).when(req).getParameter(PASSWORD_PARAMETR);
     	
     	Response response = controller.handle(req, resp, serviceFactory);
     	
@@ -54,29 +57,37 @@ public class LoginControllerTest extends AuthorizationTestSupport  {
     }
     
     @Test
-    public void test3() {
-    	when(req.getParameter("login")).thenReturn(username);
-        when(req.getParameter("password")).thenReturn("small");
+    public void smallPasswordTestAndSessionNullTest() {
+    	doReturn(SMALL_PASSWORD).when(req).getParameter(PASSWORD_PARAMETR);
         
         Response response = controller.handle(req, resp, serviceFactory);
         
         verify(serviceFactory, never()).getUserService();
         verify(service, never()).findByLoginAndPassword(anyString(), anyString());
+        verify(session, times(1)).setAttribute(anyString(), anyString());
         
-        assertThat(response).isEqualToComparingFieldByField(new Response("/authorization/login.html"));
+        assertThat(response).isEqualToComparingFieldByField(new Response(TO_LOGIN_PAGE));
     }
     
     @Test
-    public void test4() {
-    	when(req.getParameter("login")).thenReturn(username);
-        when(req.getParameter("password")).thenReturn(password);
+    public void sessionNotNullTest() {
+    	doReturn(session).when(req).getSession(false);
+        
+        Response response = controller.handle(req, resp, serviceFactory);
+        
+        verify(session, times(1)).invalidate();
+    }
+    
+    @Test
+    public void userNotFound() {
         when(service.findByLoginAndPassword(anyString(), anyString())).thenReturn(null);
         
         Response response = controller.handle(req, resp, serviceFactory);
         
         verify(serviceFactory, times(1)).getUserService();
         verify(service, times(1)).findByLoginAndPassword(anyString(), anyString());
+        verify(session, times(1)).setAttribute(anyString(), anyString());
         
-        assertThat(response).isEqualToComparingFieldByField(new Response("/authorization/login.html"));
+        assertThat(response).isEqualToComparingFieldByField(new Response(TO_LOGIN_PAGE));
     }
 }

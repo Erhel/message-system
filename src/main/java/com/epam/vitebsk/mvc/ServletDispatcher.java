@@ -26,9 +26,9 @@ public class ServletDispatcher extends HttpServlet {
 	public void init(ServletConfig config) throws ServletException {
 		super.init(config);
 		try {
-			connectionPool = new ConnectionPool(10, 100, "jdbc:postgresql://localhost:5439/message-system", "postgres", "postgres");
-		} catch (SQLException e) {
-			e.printStackTrace();
+			connectionPool = new ConnectionPool(100, "jdbc:postgresql://localhost:5439/message-system", "postgres", "postgres", "org.postgresql.Driver");
+		} catch (SQLException | ClassNotFoundException e) {
+			throw new ServletException(e);
 		}
 		
 		DAOFactory daoFactory = new DAOFactory(connectionPool);
@@ -45,12 +45,12 @@ public class ServletDispatcher extends HttpServlet {
 	}
 
 	@Override
-	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+	public void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		process(req, resp);
 	}
 
 	@Override
-	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+	public void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		process(req, resp);
 	}
 
@@ -60,16 +60,21 @@ public class ServletDispatcher extends HttpServlet {
 		int index = url.lastIndexOf(".html");
 		url = url.substring(context.length(), index);
 
-		Controller controller = ControllerFactory.getController(url);
+		Controller controller = getController(url);
+		
 		Response response = null;
 		if (controller != null) {
 			response = controller.handle(req, resp, serviceFactory);
 		}
 		
-		if (response!=null && response.isRedirect()) {
+		if (response!=null) {
 			resp.sendRedirect(context + response.getUrl());
 		} else {
 			req.getRequestDispatcher("/WEB-INF/jsp" + url + ".jsp").forward(req, resp);
 		}
+	}
+	
+	public Controller getController(String url) throws ServletException {
+		return ControllerFactory.getController(url);
 	}
 }

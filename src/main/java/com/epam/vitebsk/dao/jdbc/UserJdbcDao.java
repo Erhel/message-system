@@ -26,7 +26,11 @@ public class UserJdbcDao extends JdbcDaoSupport implements UserDao {
     };
     
     public UserJdbcDao() {
-        init("/sql.properties");
+        try {
+			init("/sql.properties");
+		} catch (SQLException e) {
+			throw new RuntimeException(e);
+		}
     }
     
     @Override

@@ -8,8 +8,7 @@ import com.epam.vitebsk.entity.User;
 
 public abstract class MessageSupport {
     
-    protected Message buildMessage(HttpServletRequest req) {
-
+    public Message buildMessage(HttpServletRequest req) {
         Long id = null;       
         String subject = req.getParameter("subject");
         String message = req.getParameter("message");

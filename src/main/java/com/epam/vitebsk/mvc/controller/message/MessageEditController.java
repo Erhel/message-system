@@ -27,7 +27,6 @@ public class MessageEditController implements Controller {
 		MessageService messageService = serviceFactory.getMessageService();
 		
         HttpSession session = req.getSession(false);
-        session.setAttribute("info", null);
         User currentUser = (User) session.getAttribute("user");
         
         Message message = null;

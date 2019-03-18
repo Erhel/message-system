@@ -17,82 +17,97 @@ import com.epam.vitebsk.mvc.controller.message.MessageEditController;
 public class MessageEditControllerTest extends MessageTestSupport {
 
 	private User user;
+	private User user2;
+	private User user3;
 	private Set<String> usernames;
 	private Message message;
+	private Message message2;
 	
-	private static Long USER1_ID = 1L;
+	private static Long USER3_ID = 3L;
+	private static String USERNAME3 = "tim.johans@mail.ru";
+	
+	private static String ID_PARAMETR = "id";
 
 	@Before
 	public void setUp() {
 		super.setUp();
 		controller = new MessageEditController();
-		user = new User(1L, "andrey.koval@mail.ru", "simple", "Andrey");
-		usernames = new TreeSet<String>(Arrays.nonNullElementsIn(Arrays.array("mike.lohan@mail.ru", "tim.johans@mail.ru")));
-		message = new Message(USER1_ID, "test", "mess", user, new User(2L, "mike.lohan@mail.ru", null , null));
-		when(session.getAttribute("user")).thenReturn(user);
+		
+		user = new User(USER_ID, USERNAME, PASSWORD, DISPLAY_NAME);
+		user2 = new User(USER2_ID, USERNAME2, "", "");
+		user3 = new User(USER3_ID, USERNAME3, "", "");
+		
+		usernames = new TreeSet<String>(Arrays.nonNullElementsIn(Arrays.array(USERNAME2, USERNAME3)));
+		
+		message = new Message(MESSAGE_ID, "", "", user, user2);
+		message2 = new Message(MESSAGE2_ID, "", "", user2, user3);
+		
+		when(session.getAttribute(USER_ATTRIBUTE)).thenReturn(user);
+		when(messageService.findUsernamesByUserId(anyLong())).thenReturn(usernames);
 	}
 
 	@Test
-	public void test1() {
-		when(req.getParameter("id")).thenReturn(null);
-		when(session.getAttribute("message")).thenReturn(null);
-		when(messageService.findUsernamesByUserId(anyLong())).thenReturn(usernames);
+	public void writeNewMessageTest() {
+		when(req.getParameter(ID_PARAMETR)).thenReturn(null);
+		when(session.getAttribute(MESSAGE_ATTRIBUTE)).thenReturn(null);
 		
 		Response response = controller.handle(req, resp, serviceFactory);
 		
         verify(serviceFactory, times(1)).getMessageService();
         verify(messageService, times(1)).findUsernamesByUserId(anyLong());
-        verify(req, times(1)).setAttribute(eq("usernames"), anyCollectionOf(TreeSet.class));
+        verify(req, times(1)).setAttribute(eq(USERNAMES_ATTRIBUTE), anyCollectionOf(TreeSet.class));
+        verify(messageService, never()).find(anyLong());
+        verify(req, never()).setAttribute(eq(MESSAGE_ATTRIBUTE), any(Message.class));
 		
 		assertThat(response).isNull();
 	}
 	
 	@Test
-	public void test2() {
-		when(req.getParameter("id")).thenReturn(null);
-		when(session.getAttribute("message")).thenReturn(message);
-		when(messageService.findUsernamesByUserId(anyLong())).thenReturn(usernames);
+	public void incorrectMessageTest() {
+		when(req.getParameter(ID_PARAMETR)).thenReturn(null);
+		when(session.getAttribute(MESSAGE_ATTRIBUTE)).thenReturn(message);
 		
 		Response response = controller.handle(req, resp, serviceFactory);
 		
         verify(serviceFactory, times(1)).getMessageService();
         verify(messageService, times(1)).findUsernamesByUserId(anyLong());
-        verify(req, times(1)).setAttribute(eq("usernames"), anyCollectionOf(TreeSet.class));
-        verify(req, times(1)).setAttribute(eq("message"), any(Message.class));
+        verify(req, times(1)).setAttribute(eq(USERNAMES_ATTRIBUTE), anyCollectionOf(TreeSet.class));
+        verify(messageService, never()).find(anyLong());
+        verify(req, times(1)).setAttribute(eq(MESSAGE_ATTRIBUTE), any(Message.class));
 		
 		assertThat(response).isNull();
 	}
 	
 	@Test
-	public void test3() {
-		when(req.getParameter("id")).thenReturn(message.getId().toString());
-		when(messageService.findUsernamesByUserId(anyLong())).thenReturn(usernames);
+	public void viewMessageTest() {
+		when(req.getParameter(ID_PARAMETR)).thenReturn(MESSAGE_ID.toString());
 		when(messageService.find(anyLong())).thenReturn(message);
 		
 		Response response = controller.handle(req, resp, serviceFactory);
 		
         verify(serviceFactory, times(1)).getMessageService();
         verify(messageService, times(1)).findUsernamesByUserId(anyLong());
-        verify(req, times(1)).setAttribute(eq("usernames"), anyCollectionOf(TreeSet.class));
-        verify(req, times(1)).setAttribute(eq("message"), any(Message.class));
+        verify(req, times(1)).setAttribute(eq(USERNAMES_ATTRIBUTE), anyCollectionOf(TreeSet.class));
+        verify(messageService, times(1)).find(anyLong());
+        verify(req, times(1)).setAttribute(eq(MESSAGE_ATTRIBUTE), any(Message.class));
 		
 		assertThat(response).isNull();
 	}
 	
 	@Test
-	public void test4() {
-		when(req.getParameter("id")).thenReturn("222");
-		when(messageService.findUsernamesByUserId(anyLong())).thenReturn(usernames);
-		when(messageService.find(anyLong())).thenReturn(new Message(222L, "", "", new User(2L, "", "", ""), new User(3L, "", "", "")));
+	public void viewSomeoneElseMessageTest() {
+		when(req.getParameter(ID_PARAMETR)).thenReturn(MESSAGE2_ID.toString());
+		when(messageService.find(anyLong())).thenReturn(message2);
 		
 		Response response = controller.handle(req, resp, serviceFactory);
 		
         verify(serviceFactory, times(1)).getMessageService();
         verify(messageService, times(1)).findUsernamesByUserId(anyLong());
-        verify(req, times(1)).setAttribute(eq("usernames"), anyCollectionOf(TreeSet.class));
-        verify(req, never()).setAttribute(eq("message"), any(Message.class));
+        verify(req, times(1)).setAttribute(eq(USERNAMES_ATTRIBUTE), anyCollectionOf(TreeSet.class));
+        verify(messageService, times(1)).find(anyLong());
+        verify(req, never()).setAttribute(eq(MESSAGE_ATTRIBUTE), any(Message.class));
 		
-		assertThat(response).isEqualToComparingFieldByField(new Response("/message/list.html"));
+		assertThat(response).isEqualToComparingFieldByField(new Response(TO_LIST_PAGE));
 	}
 
 }

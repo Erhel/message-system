@@ -24,9 +24,7 @@ public class RegistrationController implements Controller {
             return null;
         }
         
-        
-        
-        HttpSession session = req.getSession(true);
+        HttpSession session = req.getSession();
         
         if (password.length() < 6) {
             session.setAttribute("info", "password should've at least 6 symbols");
@@ -52,13 +50,14 @@ public class RegistrationController implements Controller {
             session.setAttribute("info", "password and confirm password are not matched");
             return new Response("/authorization/registration.html");
         }
-
+        
         String hashPassword = Encrypter.toHashPassword(password, username);
 
         User user = new User(null, username, hashPassword, displayName);
         UserService service = serviceFactory.getUserService();
         service.save(user);
 
+        session.setAttribute("info", null);
         session.setAttribute("success", "you are successfully registered");
         return new Response("/authorization/login.html");
     }

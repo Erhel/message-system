@@ -12,100 +12,98 @@ import org.slf4j.LoggerFactory;
 
 public class ConnectionPool {
 
-    private Logger log = LoggerFactory.getLogger(getClass());
+	private Logger log = LoggerFactory.getLogger(getClass());
 
-    private int maxPool;
+	private int maxPool;
 
-    private String url;
-    private String user;
-    private String pass;
+	@SuppressWarnings("unused")
+	private String driver;
 
-    private List<PooledConnection> free, used;
+	private String url;
+	private String user;
+	private String pass;
 
-    @SuppressWarnings("unused")
-    private ConnectionPool() {}
+	private List<PooledConnection> free, used;
 
-    public ConnectionPool(int minPool, int maxPool, String url, String username, String password) throws SQLException {
-        this.maxPool = maxPool;
-        this.url = url;
-        this.user = username;
-        this.pass = password;
-        
-        try {
-            Class.forName("org.postgresql.Driver");
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        }
+	public ConnectionPool(int maxPool, String url, String username, String password, String driver)
+			throws SQLException, ClassNotFoundException {
+		this.maxPool = maxPool;
+		this.url = url;
+		this.user = username;
+		this.pass = password;
+		this.driver = driver;
+		
+		Class.forName(driver);
+		
+		free = Collections.synchronizedList(new ArrayList<PooledConnection>(maxPool));
+		used = Collections.synchronizedList(new ArrayList<PooledConnection>(maxPool));
+	}
 
-        free = Collections.synchronizedList(new ArrayList<PooledConnection>(maxPool));
-        used = Collections.synchronizedList(new ArrayList<PooledConnection>(maxPool));
+	protected Logger getLogger() {
+		return log;
+	}
 
-        for (int i = 0; i < minPool; i++) {
-            free.add(createPooledConnection());
-        }
-    }
+	@Override
+	protected void finalize() throws Throwable {
+		destroy();
+	}
 
-    protected Logger getLogger() {
-        return log;
-    }
+	public synchronized void destroy() {
+		for (PooledConnection cw : free) {
+			try {
+				cw.getRawConnection().close();
+			} catch (Exception e) {
+				getLogger().info("Unable to close connection");
+			}
+		}
 
-    @Override
-    protected void finalize() throws Throwable {
-        destroy();
-    }
+		for (PooledConnection cw : used) {
+			try {
+				cw.getRawConnection().close();
+			} catch (Exception e) {
+				getLogger().info("Unable to close connection");
+			}
+		}
+	}
 
-    public synchronized void destroy() {
-        for (PooledConnection cw : free) {
-            try {cw.getRawConnection().close();} catch (Exception e) {getLogger().info("Unable to close connection");}
-        }
+	public synchronized Connection getConnection() throws SQLException {
+		PooledConnection cw = null;
 
-        for (PooledConnection cw : used) {
-            try {cw.getRawConnection().close();} catch (Exception e) {getLogger().info("Unable to close connection");}
-        }
-    }
+		if (free.size() > 0) {
+			cw = free.remove(free.size() - 1);
+		} else if (used.size() < maxPool) {
+			cw = createPooledConnection();
+		} else {
+			throw new RuntimeException("Unable to create a connection");
+		}
 
-    public synchronized Connection getConnection() throws SQLException {
-        PooledConnection cw = null;
+		used.add(cw);
 
-        if (free.size() > 0) {
-            cw = free.remove(free.size() - 1);
-        } else if (used.size() < maxPool) {
-            cw = createPooledConnection();
-        } else {
-            throw new RuntimeException("Unable to create a connection");
-        }
+		return cw;
+	}
 
-        used.add(cw);
+	protected PooledConnection createPooledConnection() throws SQLException {
+		Connection con = null;
+		PooledConnection pcon = null;
 
-        return cw;
-    }
+		try {
+			con = getSimpleConnection();
+			pcon = new PooledConnection(this, con);
+			getLogger().info("Created a new connection");
+		} catch (SQLException e) {
+			getLogger().error("Can't create a new connection for {}", url, e);
+			throw e;
+		}
 
-    protected PooledConnection createPooledConnection() throws SQLException {
-      Connection con = null;
-      PooledConnection pcon = null;
-      
-      try {
-          
-        if (user!=null && pass!=null) {
-            con = DriverManager.getConnection(url, user, pass);
-        } else {
-            con = DriverManager.getConnection(url);
-        }
+		return pcon;
+	}
 
-        pcon = new PooledConnection(this, con);
-        getLogger().info("Created a new connection");
-      } catch (SQLException e) {
-        getLogger().error("Can't create a new connection for {}", url, e);
-        throw e;
-      } finally {
-          try {if (con != null) con.close();} catch (SQLException e2) {getLogger().error("Unable to close connection", e2);}  
-      }
+	protected void freePooledConnection(PooledConnection con) {
+		used.remove(con);
+		free.add(con);
+	}
 
-      return pcon;
-    }
-
-    protected void freePooledConnection(PooledConnection con) {
-        used.remove(con);
-        free.add(con);
-    }
+	protected Connection getSimpleConnection() throws SQLException {
+		return DriverManager.getConnection(url, user, pass);
+	}
 }

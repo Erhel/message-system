@@ -31,6 +31,7 @@ public class SecurityFilter implements Filter {
         String context = req.getContextPath();
         String url = req.getRequestURI();
         url = url.substring(context.length());
+        
         if (url.intern() == "/authorization/login.html" || url.intern()=="/authorization/registration.html") {
             chain.doFilter(req, resp);
             return;

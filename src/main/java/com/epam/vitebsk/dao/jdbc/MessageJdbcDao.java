@@ -29,7 +29,11 @@ public class MessageJdbcDao extends JdbcDaoSupport implements MessageDao {
     };
     
 	public MessageJdbcDao() {
-        init("/sql.properties");
+        try {
+			init("/sql.properties");
+		} catch (SQLException e) {
+			throw new RuntimeException(e);
+		}
     }
     
     @Override

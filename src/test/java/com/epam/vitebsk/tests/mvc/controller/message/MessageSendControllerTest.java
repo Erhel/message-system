@@ -4,7 +4,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import org.assertj.core.internal.bytebuddy.utility.RandomString;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.mockito.Mock;
 
@@ -17,11 +16,18 @@ import com.epam.vitebsk.service.UserService;
 
 public class MessageSendControllerTest extends MessageTestSupport {
 
-	private String username;
-	private String subject;
-	private String mess;
+	private static String RECIPIENT_PARAMETR = "recipient";
+	private static String SUBJECT_PARAMETR = "subject";
+	private static String MESSAGE_PARAMETR = "message";
+	
+	private static String LARGE_SUBJECT = RandomString.make(257);
+	private static String LARGE_TEXT = RandomString.make(1025);
+	
 	private User user;
+	private User user2;
 	private Message message;
+	private Response responseToListPage;
+	private Response responseToEditPage;
 	
 	@Mock
 	UserService userService;
@@ -33,89 +39,106 @@ public class MessageSendControllerTest extends MessageTestSupport {
 	public void setUp() {
 		super.setUp();
 		controller = new MessageSendController();
-		username = "mike.lohand@mail.ru";
-		subject =  "test";
-		mess = "testMessage";
-		user = new User(1L, "andrey.koval@mail.ru", "simple", "Andrey");
-		message = new Message(1L, subject, mess, user, new User(2L, username, "", ""));
+		user = new User(USER_ID, USERNAME, PASSWORD, DISPLAY_NAME);
+		user2 = new User(USER2_ID, USERNAME2, "", "");
+		message = new Message(MESSAGE_ID, SUBJECT, TEXT, user, user2);
+		responseToListPage = new Response(TO_LIST_PAGE);
+		responseToEditPage = new Response(TO_EDIT_PAGE);
+		
+		when(req.getParameter(RECIPIENT_PARAMETR)).thenReturn(USERNAME2);
+		when(req.getParameter(SUBJECT_PARAMETR)).thenReturn(SUBJECT);
+		when(req.getParameter(MESSAGE_PARAMETR)).thenReturn(TEXT);
 	}
 
 	@Test
-	public void test1() {
-		when(req.getAttribute("recipient")).thenReturn(null);
-		when(req.getAttribute("subject")).thenReturn(subject);
-		when(req.getAttribute("message")).thenReturn(mess);
+	public void redirectToListPageWhenRecipientNullTest() {
+		doReturn(null).when(req).getParameter(RECIPIENT_PARAMETR);
 		
 		Response response = controller.handle(req, resp, serviceFactory);
 		
-		assertThat(response).isEqualToComparingFieldByField(new Response("/message/list.html"));
+		verify(messageService, never()).save(any(Message.class));
+		verify(mailService, never()).send(any(Message.class));
+		
+		assertThat(response).isEqualToComparingFieldByField(responseToListPage);
 	}
 	
 	@Test
-	public void test2() {
-		when(req.getAttribute("recipient")).thenReturn(username);
-		when(req.getAttribute("subject")).thenReturn(null);
-		when(req.getAttribute("message")).thenReturn(mess);
+	public void redirectToListPageWhenSubjectNullTest() {
+		doReturn(null).when(req).getParameter(SUBJECT_PARAMETR);
 		
 		Response response = controller.handle(req, resp, serviceFactory);
 		
-		assertThat(response).isEqualToComparingFieldByField(new Response("/message/list.html"));
+		verify(messageService, never()).save(any(Message.class));
+		verify(mailService, never()).send(any(Message.class));
+		
+		assertThat(response).isEqualToComparingFieldByField(responseToListPage);
 	}
 	
 	@Test
-	public void test3() {
-		when(req.getAttribute("recipient")).thenReturn(username);
-		when(req.getAttribute("subject")).thenReturn(subject);
-		when(req.getAttribute("message")).thenReturn(null);
+	public void redirectToListPageWhenTextNullTest() {
+		doReturn(null).when(req).getParameter(MESSAGE_PARAMETR);
 		
 		Response response = controller.handle(req, resp, serviceFactory);
 		
-		assertThat(response).isEqualToComparingFieldByField(new Response("/message/list.html"));
+		verify(messageService, never()).save(any(Message.class));
+		verify(mailService, never()).send(any(Message.class));
+		
+		assertThat(response).isEqualToComparingFieldByField(responseToListPage);
 	}
 
-	@Ignore
-	public void test4() {
-		when(req.getAttribute("recipient")).thenReturn(username);
-		when(req.getAttribute("subject")).thenReturn(RandomString.make(257));
-		when(req.getAttribute("message")).thenReturn(mess);
+	@Test
+	public void largeSubjectTest() {
+		doReturn(LARGE_SUBJECT).when(req).getParameter(SUBJECT_PARAMETR);
 		
 		Response response = controller.handle(req, resp, serviceFactory);
 		
-		verify(session, times(1)).setAttribute(eq("message"), any(Message.class));
+		verify(session, times(2)).setAttribute(anyString(), any());
+		verify(messageService, never()).save(any(Message.class));
+		verify(mailService, never()).send(any(Message.class));
 		
-		assertThat(response).isEqualToComparingFieldByField(new Response("/message/edit.html"));
+		assertThat(response).isEqualToComparingFieldByField(responseToEditPage);
 	}
 	
-	@Ignore
-	public void test5() {
-		when(req.getAttribute("recipient")).thenReturn(username);
-		when(req.getAttribute("subject")).thenReturn(subject);
-		when(req.getAttribute("message")).thenReturn(RandomString.make(1025));
+	@Test
+	public void largeTextTest() {
+		doReturn(LARGE_TEXT).when(req).getParameter(MESSAGE_PARAMETR);
+		when(serviceFactory.getUserService()).thenReturn(userService);
+		
+		Response response = controller.handle(req, resp, serviceFactory);
+		
+		verify(session, times(2)).setAttribute(anyString(), any());
+		verify(messageService, never()).save(any(Message.class));
+		verify(mailService, never()).send(any(Message.class));
+		
+		assertThat(response).isEqualToComparingFieldByField(responseToEditPage);
+	}
+	
+	@Test
+	public void recipientNotExistTest() {
 		when(serviceFactory.getUserService()).thenReturn(userService);
 		when(userService.findByUsername(anyString())).thenReturn(null);
 		
 		Response response = controller.handle(req, resp, serviceFactory);
 		
-		verify(session, times(1)).setAttribute(eq("message"), any(Message.class));
+		verify(userService, times(1)).findByUsername(anyString());
+		verify(session, times(2)).setAttribute(anyString(), any());
+		verify(messageService, never()).save(any(Message.class));
+		verify(mailService, never()).send(any(Message.class));
 		
-		assertThat(response).isEqualToComparingFieldByField(new Response("/message/edit.htmls"));
+		assertThat(response).isEqualToComparingFieldByField(responseToEditPage);
 	}
 	
-	@Ignore
-	public void test6() {
-		when(req.getAttribute("recipient")).thenReturn(username);
-		when(req.getAttribute("subject")).thenReturn(subject);
-		when(req.getAttribute("message")).thenReturn(mess);
+	@Test
+	public void successfullSentMessageTest() {
 		when(serviceFactory.getUserService()).thenReturn(userService);
 		when(serviceFactory.getMailService()).thenReturn(mailService);
-		when(userService.findByUsername(anyString())).thenReturn(user);
-		doNothing().when(messageService).save(any(Message.class));
+		when(userService.findByUsername(anyString())).thenReturn(user2);
 		
 		Response response = controller.handle(req, resp, serviceFactory);
 		
 		verify(messageService, times(1)).save(any(Message.class));
-		verify(mailService, times(1)).send(any(Message.class));
+		verify(serviceFactory, times(1)).getMailService();
 		
-		assertThat(response).isEqualToComparingFieldByField(new Response("/message/list.html"));
+		assertThat(response).isEqualToComparingFieldByField(responseToListPage);
 	}
 }

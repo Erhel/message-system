@@ -11,166 +11,147 @@ import com.epam.vitebsk.mvc.controller.authorization.RegistrationController;
 
 public class RegistrationControllerTest extends AuthorizationTestSupport {
 
-	private String displayName = "Andrey";
-	private String username = "andrey.koval@mail.ru";
-	private String password = "simple";
+	private Response responseToRegistrationPage;
+	
+	private static String LARGE_PASSWORD = RandomString.make(129);
+	private static String LARGE_DISPLAY_NAME = RandomString.make(129);
+	private static String LARGE_USERNAME = RandomString.make(257);
+	private static String WRONG_PASSWORD = "wrongPassword";
 	
 	@Before
 	public void setUp() {
 		super.setUp();
+		when(req.getSession()).thenReturn(session);
+		when(req.getParameter(DISPLAY_NAME_PARAMETR)).thenReturn(DISPLAY_NAME);
+		when(req.getParameter(USERNAME_PARAMETR)).thenReturn(USERNAME);
+		when(req.getParameter(PASSWORD_PARAMETR)).thenReturn(PASSWORD);
+		when(req.getParameter(CONFIRM_PARAMETR)).thenReturn(PASSWORD);
+		
 		controller = new RegistrationController();
+		responseToRegistrationPage = new Response(TO_REGISTRATION_PAGE);
 	}
 
 	@Test
-	public void test1() {
-
-		when(req.getParameter("displayName")).thenReturn(null);
-		when(req.getParameter("username")).thenReturn(username);
-		when(req.getParameter("password")).thenReturn(password);
-		when(req.getParameter("confirm")).thenReturn(password);
+	public void forwardToRegistrationPageWhenDisplayNameNullTest() {
+		doReturn(null).when(req).getParameter(DISPLAY_NAME_PARAMETR);
 
 		Response response = controller.handle(req, resp, serviceFactory);
+		
+		verify(serviceFactory, never()).getUserService();
+		verify(service, never()).save(any());
+
 		assertThat(response).isNull();
-
-		verify(serviceFactory, never()).getUserService();
-		verify(service, never()).save(any());
 	}
 	
 	@Test
-	public void test2() {
-
-		when(req.getParameter("displayName")).thenReturn(displayName);
-		when(req.getParameter("username")).thenReturn(null);
-		when(req.getParameter("password")).thenReturn(password);
-		when(req.getParameter("confirm")).thenReturn(password);
-
+	public void forwardToRegistrationPageWhenUsernameNullTest() {
+		doReturn(null).when(req).getParameter(USERNAME_PARAMETR);
+		
 		Response response = controller.handle(req, resp, serviceFactory);
+		
+		verify(serviceFactory, never()).getUserService();
+		verify(service, never()).save(any());
+		
 		assertThat(response).isNull();
-
-		verify(serviceFactory, never()).getUserService();
-		verify(service, never()).save(any());
 	}
 
 	@Test
-	public void test3() {
-
-		when(req.getParameter("displayName")).thenReturn(displayName);
-		when(req.getParameter("username")).thenReturn(username);
-		when(req.getParameter("password")).thenReturn(null);
-		when(req.getParameter("confirm")).thenReturn(password);
+	public void forwardToRegistrationPageWhenPasswordNullTest() {
+		doReturn(null).when(req).getParameter(PASSWORD_PARAMETR);
 
 		Response response = controller.handle(req, resp, serviceFactory);
+		
+		verify(serviceFactory, never()).getUserService();
+		verify(service, never()).save(any());
+
 		assertThat(response).isNull();
-
-		verify(serviceFactory, never()).getUserService();
-		verify(service, never()).save(any());
 	}
 	
 	@Test
-	public void test4() {
-
-		when(req.getParameter("displayName")).thenReturn(displayName);
-		when(req.getParameter("username")).thenReturn(username);
-		when(req.getParameter("password")).thenReturn(password);
-		when(req.getParameter("confirm")).thenReturn(null);
+	public void forwardToRegistrationPageWhenConfirmNullTest() {
+		doReturn(null).when(req).getParameter(CONFIRM_PARAMETR);
 
 		Response response = controller.handle(req, resp, serviceFactory);
+		
+		verify(serviceFactory, never()).getUserService();
+		verify(service, never()).save(any());
+		
 		assertThat(response).isNull();
-
-		verify(serviceFactory, never()).getUserService();
-		verify(service, never()).save(any());
 	}
 	
 	@Test
-	public void test5() {
-
-		when(req.getParameter("displayName")).thenReturn(displayName);
-		when(req.getParameter("username")).thenReturn(username);
-		when(req.getParameter("password")).thenReturn("small");
-		when(req.getParameter("confirm")).thenReturn("small");
-
+	public void smallPasswordTest() {
+		doReturn(SMALL_PASSWORD).when(req).getParameter(PASSWORD_PARAMETR);
+		
 		Response response = controller.handle(req, resp, serviceFactory);
 		
-		assertThat(response).isEqualToComparingFieldByField(new Response("/authorization/registration.html"));
-
+		verify(session, times(1)).setAttribute(anyString(), anyString());
 		verify(serviceFactory, never()).getUserService();
 		verify(service, never()).save(any());
+		
+		assertThat(response).isEqualToComparingFieldByField(responseToRegistrationPage);
 	}
 	
 	@Test
-	public void test6() {
-
-		when(req.getParameter("displayName")).thenReturn(displayName);
-		when(req.getParameter("username")).thenReturn(username);
-		when(req.getParameter("password")).thenReturn(RandomString.make(129));
-		when(req.getParameter("confirm")).thenReturn(password);
+	public void largePasswordTest() {
+		doReturn(LARGE_PASSWORD).when(req).getParameter(PASSWORD_PARAMETR);
 
 		Response response = controller.handle(req, resp, serviceFactory);
 		
-
-		assertThat(response).isEqualToComparingFieldByField(new Response("/authorization/registration.html"));
-
+		verify(session, times(1)).setAttribute(anyString(), anyString());
 		verify(serviceFactory, never()).getUserService();
 		verify(service, never()).save(any());
+		
+		assertThat(response).isEqualToComparingFieldByField(new Response(TO_REGISTRATION_PAGE));
 	}
 	
 	@Test
-	public void test7() {
-		when(req.getParameter("displayName")).thenReturn(RandomString.make(129));
-		when(req.getParameter("username")).thenReturn(username);
-		when(req.getParameter("password")).thenReturn(password);
-		when(req.getParameter("confirm")).thenReturn(password);
+	public void largeDisplayNameTest() {
+		doReturn(LARGE_DISPLAY_NAME).when(req).getParameter(DISPLAY_NAME_PARAMETR);
 
 		Response response = controller.handle(req, resp, serviceFactory);
-		
-		assertThat(response).isEqualToComparingFieldByField(new Response("/authorization/registration.html"));
 
+		verify(session, times(1)).setAttribute(anyString(), anyString());
 		verify(serviceFactory, never()).getUserService();
 		verify(service, never()).save(any());
+		
+		assertThat(response).isEqualToComparingFieldByField(responseToRegistrationPage);
 	}
 	
 	@Test
-	public void test8() {
-		when(req.getParameter("displayName")).thenReturn(displayName);
-		when(req.getParameter("username")).thenReturn(RandomString.make(257));
-		when(req.getParameter("password")).thenReturn(password);
-		when(req.getParameter("confirm")).thenReturn(password);
+	public void largeUsernameTest() {
+		doReturn(LARGE_USERNAME).when(req).getParameter(USERNAME_PARAMETR);
 
 		Response response = controller.handle(req, resp, serviceFactory);
-		
-		assertThat(response).isEqualToComparingFieldByField(new Response("/authorization/registration.html"));
 
+		verify(session, times(1)).setAttribute(anyString(), anyString());
 		verify(serviceFactory, never()).getUserService();
 		verify(service, never()).save(any());
+		
+		assertThat(response).isEqualToComparingFieldByField(responseToRegistrationPage);
 	}
 	
 	@Test
-	public void test9() {
-		when(req.getParameter("displayName")).thenReturn(displayName);
-		when(req.getParameter("username")).thenReturn(username);
-		when(req.getParameter("password")).thenReturn(password);
-		when(req.getParameter("confirm")).thenReturn("small");
+	public void passwordAndConfirmNotMatchedTest() {
+		doReturn(WRONG_PASSWORD).when(req).getParameter(CONFIRM_PARAMETR);
 
 		Response response = controller.handle(req, resp, serviceFactory);
 		
-		assertThat(response).isEqualToComparingFieldByField(new Response("/authorization/registration.html"));
-
+		verify(session, times(1)).setAttribute(anyString(), anyString());
 		verify(serviceFactory, never()).getUserService();
 		verify(service, never()).save(any());
+		
+		assertThat(response).isEqualToComparingFieldByField(responseToRegistrationPage);
 	}
 	
 	@Test
-	public void test10() {
-		when(req.getParameter("displayName")).thenReturn(displayName);
-		when(req.getParameter("username")).thenReturn(username);
-		when(req.getParameter("password")).thenReturn(password);
-		when(req.getParameter("confirm")).thenReturn(password);
-
+	public void successfullRegistrationTest() {
 		Response response = controller.handle(req, resp, serviceFactory);
 		
-		assertThat(response).isEqualToComparingFieldByField(new Response("/authorization/login.html"));
-
+		verify(session, times(2)).setAttribute(anyString(), anyString());
 		verify(serviceFactory, times(1)).getUserService();
 		verify(service, times(1)).save(any());
+
+		assertThat(response).isEqualToComparingFieldByField(new Response(TO_LOGIN_PAGE));
 	}
 }

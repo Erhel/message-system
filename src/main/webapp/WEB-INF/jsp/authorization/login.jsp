@@ -16,7 +16,7 @@
 						<c:url var="urlLogin" value="/authorization/login.html"/>
 						<form action="${urlLogin}" method="post">
 							<div class="form-group">
-								<input name="login" type="email" class="form-control" placeholder="Enter email">
+								<input name="username" type="email" class="form-control" placeholder="Enter email">
 							</div>
 							<div class="form-group">
 								<input name="password" type="password" required class="form-control" placeholder="Enter password">

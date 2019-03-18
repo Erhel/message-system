@@ -17,10 +17,27 @@ public class LogoutControllerTest extends AuthorizationTestSupport {
 	}
 	
 	@Test
-	public void test() {		
+	public void whenSessionExistTest() {
+		
+		when(req.getSession(false)).thenReturn(session);
+		
 		Response response = controller.handle(req, resp, serviceFactory);
 		
-		assertThat(response).isEqualToComparingFieldByField(new Response("/authorization/login.html"));
+		verify(session, times(1)).invalidate();
+		
+		assertThat(response).isEqualToComparingFieldByField(new Response(TO_LOGIN_PAGE));
+	}
+	
+	@Test
+	public void whenSessionNotExistTest() {
+		
+		when(req.getSession(false)).thenReturn(null);
+		
+		Response response = controller.handle(req, resp, serviceFactory);
+		
+		verify(session, never()).invalidate();
+		
+		assertThat(response).isEqualToComparingFieldByField(new Response(TO_LOGIN_PAGE));
 	}
 
 }
