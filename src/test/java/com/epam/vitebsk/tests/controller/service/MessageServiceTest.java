@@ -19,10 +19,10 @@ import com.epam.vitebsk.model.entity.User;
 
 public class MessageServiceTest extends ServiceTestSupport<Long, Message> {
 
-    private static Long USER2_ID = 2L;
-    private static String USERNAME2 = "mike.lohan@mail.ru";
-    private static Long MESSAGE2_ID = 2L;
-    private static Long MESSAGE3_ID = 3L;
+    private static final Long USER2_ID = 2L;
+    private static final String USERNAME2 = "mike.lohan@mail.ru";
+    private static final Long MESSAGE2_ID = 2L;
+    private static final Long MESSAGE3_ID = 3L;
 
     private MessageService messageService;
 

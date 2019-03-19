@@ -24,16 +24,16 @@ public class ServletDispatcherTest extends ServletTestSupport {
     private Response response;
 
     @Mock
-    ConnectionPool connectionPool;
+    private ConnectionPool connectionPool;
 
     @Mock
-    Controller controller;
+    private Controller controller;
 
     @Mock
-    ServiceFactory serviceFactory;
+    private ServiceFactory serviceFactory;
 
     @Mock
-    RequestDispatcher requestDispatcher;
+    private RequestDispatcher requestDispatcher;
 
     @Before
     public void setUp() {

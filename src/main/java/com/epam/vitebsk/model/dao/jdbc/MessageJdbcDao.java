@@ -8,6 +8,7 @@ import com.epam.vitebsk.model.dao.Mapper;
 import com.epam.vitebsk.model.dao.MessageDao;
 import com.epam.vitebsk.model.entity.Message;
 import com.epam.vitebsk.model.entity.User;
+import com.epam.vitebsk.model.exception.MapperException;
 
 public class MessageJdbcDao extends JdbcDaoSupport implements MessageDao {
 
@@ -18,6 +19,8 @@ public class MessageJdbcDao extends JdbcDaoSupport implements MessageDao {
     private static final String SELECT_MESSAGE_BY_ID = "message.selectById";
     private static final String SELECT_MESSAGES_BY_SENDER_ID = "message.selectListBySenderId";
     private static final String SELECT_MESSAGES_BY_RECIPIENT_ID = "message.selectListByRecipientId";
+
+    private static final String UNABLE_MAP_TO_MESSAGE = "Can't map to message";
 
     private Mapper<Message> mapper = new Mapper<Message>() {
         @Override
@@ -32,21 +35,13 @@ public class MessageJdbcDao extends JdbcDaoSupport implements MessageDao {
                         new User(recipientId, null, null, null));
                 return message;
             } catch (SQLException e) {
-                // TODO: exception
-                throw new RuntimeException(e);
+                throw new MapperException(UNABLE_MAP_TO_MESSAGE, e);
             }
         }
     };
 
     public MessageJdbcDao() {
-        try {
-            init(SQL_RESOURCE);
-        } catch (SQLException e) {
-
-            // TODO: exception
-
-            throw new RuntimeException(e);
-        }
+        init(SQL_RESOURCE);
     }
 
     @Override

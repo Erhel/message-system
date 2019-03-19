@@ -11,6 +11,7 @@ import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
+import com.epam.vitebsk.controller.exception.SendMessageException;
 import com.epam.vitebsk.model.entity.Message;
 
 public class MailService {
@@ -19,6 +20,8 @@ public class MailService {
     private static final String HOST_PROPERTY = "mail.smtp.host";
     private static final String PORT_PROPERTY = "mail.smtp.port";
     private static final String AUTH_PROPERTY = "mail.smtp.auth";
+
+    private static final String UNABLE_SEND_MESSAGE = "Can't send message";
 
     private final String username;
     private final String password;
@@ -48,8 +51,9 @@ public class MailService {
             transport.close();
 
         } catch (MessagingException e) {
-            e.printStackTrace();
+            throw new SendMessageException(UNABLE_SEND_MESSAGE, e);
         }
+
     }
 
     public javax.mail.Message compose(Message message) throws MessagingException {

@@ -18,6 +18,7 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.slf4j.Logger;
 
+import com.epam.vitebsk.model.exception.CreateConnectionException;
 import com.epam.vitebsk.model.pool.ConnectionPool;
 import com.epam.vitebsk.model.pool.PooledConnection;
 
@@ -25,6 +26,8 @@ public class ConnectionPoolTest {
 
     private static final int MAXPOOL_SIZE = 5;
     private static final String POSTGRESQL_DRIVER = "org.postgresql.Driver";
+
+    private static final String CONNETION_POOL_IS_FULL = "All connections occupied. Increase maximum pool size.";
 
     private MockConnectionPool spyConnectionPool;
 
@@ -88,7 +91,7 @@ public class ConnectionPoolTest {
                 .isEqualToComparingFieldByField(new PooledConnection(spyConnectionPool, connection));
     }
 
-    @Test(expected = SQLException.class)
+    @Test(expected = CreateConnectionException.class)
     public void createPooledConnectionFailedTest() throws SQLException {
 
         doThrow(SQLException.class).when(spyConnectionPool).getSimpleConnection();
@@ -119,8 +122,8 @@ public class ConnectionPoolTest {
             try {
                 spyConnectionPool.getConnection();
             } catch (Exception e) {
-                assertThat(e).isExactlyInstanceOf(RuntimeException.class);
-                assertThat(e.getMessage()).hasToString("Unable to create a connection");
+                assertThat(e).isExactlyInstanceOf(CreateConnectionException.class);
+                assertThat(e.getMessage()).hasToString(CONNETION_POOL_IS_FULL);
             }
         });
     }

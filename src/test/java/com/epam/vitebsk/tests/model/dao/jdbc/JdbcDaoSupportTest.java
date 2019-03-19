@@ -21,17 +21,18 @@ import com.epam.vitebsk.model.entity.User;
 @RunWith(MockitoJUnitRunner.class)
 public class JdbcDaoSupportTest extends JdbcTestSupport {
 
-    private List<User> users;
     private static String SELECT_LIST = "select * from \"user\"";
 
-    @Mock
-    PreparedStatement preparedStatement;
+    private List<User> users;
 
     @Mock
-    ResultSet resultSet;
+    private PreparedStatement preparedStatement;
 
     @Mock
-    Mapper<User> mapper;
+    private ResultSet resultSet;
+
+    @Mock
+    private Mapper<User> mapper;
 
     @Before
     public void setUp() {

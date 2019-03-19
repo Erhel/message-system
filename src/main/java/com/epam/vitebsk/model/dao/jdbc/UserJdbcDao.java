@@ -6,6 +6,7 @@ import java.sql.SQLException;
 import com.epam.vitebsk.model.dao.Mapper;
 import com.epam.vitebsk.model.dao.UserDao;
 import com.epam.vitebsk.model.entity.User;
+import com.epam.vitebsk.model.exception.MapperException;
 
 public class UserJdbcDao extends JdbcDaoSupport implements UserDao {
 
@@ -16,6 +17,8 @@ public class UserJdbcDao extends JdbcDaoSupport implements UserDao {
     private static final String SELECT_USER_BY_ID = "user.selectById";
     private static final String SELECT_USER_BY_USERNAME_AND_PASSWORD = "user.selectByLoginAndPassword";
     private static final String SELECT_USER_BY_USERNAME = "user.selectByUsername";
+
+    private static final String UNABLE_MAP_TO_USER = "Can't map to user";
 
     private Mapper<User> mapper = new Mapper<User>() {
         @Override
@@ -28,19 +31,13 @@ public class UserJdbcDao extends JdbcDaoSupport implements UserDao {
                 User user = new User(id, username, password, displayName);
                 return user;
             } catch (SQLException e) {
-                // TODO: exception
-                throw new RuntimeException(e);
+                throw new MapperException(UNABLE_MAP_TO_USER, e);
             }
         }
     };
 
     public UserJdbcDao() {
-        try {
-            init(SQL_RESOURCE);
-        } catch (SQLException e) {
-            // TODO: exception
-            throw new RuntimeException(e);
-        }
+        init(SQL_RESOURCE);
     }
 
     @Override

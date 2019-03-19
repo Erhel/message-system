@@ -17,7 +17,7 @@ public class EntityServiceTest extends ServiceTestSupport<Long, User> {
     private User user;
 
     @Mock
-    UserDao userDao;
+    private UserDao userDao;
 
     @Before
     public void setUp() {

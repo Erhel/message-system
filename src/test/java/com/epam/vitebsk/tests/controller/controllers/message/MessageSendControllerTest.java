@@ -19,8 +19,8 @@ import com.epam.vitebsk.model.entity.User;
 import com.epam.vitebsk.utils.Route;
 
 public class MessageSendControllerTest extends MessageTestSupport {
-    private static String LARGE_SUBJECT = RandomString.make(257);
-    private static String LARGE_TEXT = RandomString.make(1025);
+    private static final String LARGE_SUBJECT = RandomString.make(257);
+    private static final String LARGE_TEXT = RandomString.make(1025);
 
     private User user;
     private User user2;

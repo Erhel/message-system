@@ -16,12 +16,12 @@ import com.epam.vitebsk.utils.Route;
 
 public class RegistrationControllerTest extends AuthorizationTestSupport {
 
-    private Response responseToRegistrationPage;
-
     private static final String LARGE_PASSWORD = RandomString.make(129);
     private static final String LARGE_DISPLAY_NAME = RandomString.make(129);
     private static final String LARGE_USERNAME = RandomString.make(257);
     private static final String WRONG_PASSWORD = "wrongPassword";
+
+    private Response responseToRegistrationPage;
 
     @Before
     public void setUp() {

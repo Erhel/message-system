@@ -10,10 +10,22 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.epam.vitebsk.model.dao.Mapper;
+import com.epam.vitebsk.model.exception.BuildSqlException;
+import com.epam.vitebsk.model.exception.SQLQueryException;
 import com.epam.vitebsk.utils.Resource;
 
 public abstract class JdbcDaoSupport {
+
+    private static final String BUILD_SQL_EXCEPTION = "Can't set object in statement";
+    private static final String CANT_CLOSE_RESULT_SET = "Can't close resutl set";
+    private static final String CANT_CLOSE_STATEMENT = "Can't close statement";
+    private static final String CANT_QUERY = "Can't query to database";
+
+    private Logger logger = LoggerFactory.getLogger(getClass());
 
     private Map<String, String> map = new HashMap<>();
 
@@ -23,13 +35,17 @@ public abstract class JdbcDaoSupport {
         this.connection = connection;
     }
 
-    public void init(final String name) throws SQLException {
+    public void init(final String name) {
         map = new Resource(name).load().toMap();
     }
 
-    private void buildQuery(PreparedStatement preparedStatement, Object... params) throws SQLException {
-        for (int i = 0; i < params.length; i++) {
-            preparedStatement.setObject(i + 1, params[i]);
+    private void buildQuery(PreparedStatement preparedStatement, Object... params) throws BuildSqlException {
+        try {
+            for (int i = 0; i < params.length; i++) {
+                preparedStatement.setObject(i + 1, params[i]);
+            }
+        } catch (SQLException e) {
+            throw new BuildSqlException(BUILD_SQL_EXCEPTION, e);
         }
     }
 
@@ -52,21 +68,20 @@ public abstract class JdbcDaoSupport {
             }
 
             return null;
-        } catch (SQLException e) {
-            // TODO: exception
-            throw new RuntimeException(e);
+        } catch (Exception e) {
+            throw new SQLQueryException(CANT_QUERY, e);
         } finally {
             if (resultSet != null)
                 try {
                     resultSet.close();
-                } catch (Exception e) {
-                    // TODO: logging
+                } catch (SQLException e) {
+                    getLogger().error(CANT_CLOSE_RESULT_SET, e);
                 }
             if (preparedStatement != null)
                 try {
                     preparedStatement.close();
-                } catch (Exception e) {
-                    // TODO: logging
+                } catch (SQLException e) {
+                    getLogger().error(CANT_CLOSE_STATEMENT, e);
                 }
         }
     }
@@ -91,21 +106,20 @@ public abstract class JdbcDaoSupport {
             }
 
             return list;
-        } catch (SQLException e) {
-            // TODO: exception
-            throw new RuntimeException(e);
+        } catch (Exception e) {
+            throw new SQLQueryException(CANT_QUERY, e);
         } finally {
             if (resultSet != null)
                 try {
                     resultSet.close();
-                } catch (Exception e) {
-                    // TODO: logging
+                } catch (SQLException e) {
+                    getLogger().error(CANT_CLOSE_RESULT_SET, e);
                 }
             if (preparedStatement != null)
                 try {
                     preparedStatement.close();
-                } catch (Exception e) {
-                    // TODO: logging
+                } catch (SQLException e) {
+                    getLogger().error(CANT_CLOSE_STATEMENT, e);
                 }
         }
     }
@@ -119,15 +133,14 @@ public abstract class JdbcDaoSupport {
             buildQuery(preparedStatement, params);
 
             preparedStatement.executeUpdate();
-        } catch (SQLException e) {
-            // TODO: exception
-            throw new RuntimeException(e);
+        } catch (Exception e) {
+            throw new SQLQueryException(CANT_QUERY, e);
         } finally {
             if (preparedStatement != null)
                 try {
                     preparedStatement.close();
-                } catch (Exception e) {
-                    // TODO: logging
+                } catch (SQLException e) {
+                    getLogger().error(CANT_CLOSE_STATEMENT, e);
                 }
         }
     }
@@ -140,5 +153,9 @@ public abstract class JdbcDaoSupport {
 
     public <T> T apply(Mapper<T> mapper, ResultSet rs) {
         return mapper.map(rs);
+    }
+
+    protected Logger getLogger() {
+        return logger;
     }
 }

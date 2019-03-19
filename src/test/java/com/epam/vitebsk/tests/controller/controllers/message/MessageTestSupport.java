@@ -17,7 +17,7 @@ public class MessageTestSupport extends ControllerTestSupport {
     public static final Long MESSAGE2_ID = 2L;
 
     @Mock
-    MessageService messageService;
+    protected MessageService messageService;
 
     @Before
     public void setUp() {

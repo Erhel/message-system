@@ -6,7 +6,13 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
 
+import com.epam.vitebsk.utils.exception.CloseInputStreamException;
+import com.epam.vitebsk.utils.exception.LoadResourceException;
+
 public class Resource {
+
+    private static final String UNABLE_LOAD_RESOURCE = "Failed to load resource";
+    private static final String UNABLE_CLOSE_INPUT_STREAM = "Failed to close resource input stream";
 
     private Properties properties;
     private String name;
@@ -29,14 +35,12 @@ public class Resource {
         try {
             properties.load(inputStream);
         } catch (IOException e) {
-            // TODO: exception
-            e.printStackTrace();
+            throw new LoadResourceException(UNABLE_LOAD_RESOURCE, e);
         } finally {
             try {
                 inputStream.close();
             } catch (IOException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
+                throw new CloseInputStreamException(UNABLE_CLOSE_INPUT_STREAM, e);
             }
         }
         return this;

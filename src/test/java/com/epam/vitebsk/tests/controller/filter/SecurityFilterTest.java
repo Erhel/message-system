@@ -17,13 +17,13 @@ import com.epam.vitebsk.tests.controller.ServletTestSupport;
 
 public class SecurityFilterTest extends ServletTestSupport {
 
-    private static String USER_ATTRIBUTE = "user";
+    private static final String USER_ATTRIBUTE = "user";
 
     private SecurityFilter securityFilter;
     private User user;
 
     @Mock
-    FilterChain filterChain;
+    private FilterChain filterChain;
 
     @Before
     public void setUp() {

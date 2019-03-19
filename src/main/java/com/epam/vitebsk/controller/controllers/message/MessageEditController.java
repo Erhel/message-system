@@ -11,6 +11,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.epam.vitebsk.controller.Response;
 import com.epam.vitebsk.controller.controllers.Controller;
 import com.epam.vitebsk.controller.service.MessageService;
@@ -21,6 +24,10 @@ import com.epam.vitebsk.utils.Route;
 
 public class MessageEditController implements Controller {
 
+    private static final String PARSER_ID_ERROR = "Id parameter doesn't contain number";
+
+    private Logger logger = LoggerFactory.getLogger(getClass());
+
     @Override
     public Response handle(HttpServletRequest req, HttpServletResponse resp, ServiceFactory serviceFactory) {
 
@@ -30,7 +37,7 @@ public class MessageEditController implements Controller {
         try {
             id = Long.parseLong(req.getParameter(ID_PARAMETR));
         } catch (NumberFormatException e) {
-            // TODO: Logging
+            getLogger().error(PARSER_ID_ERROR);
         }
 
         MessageService messageService = serviceFactory.getMessageService();
@@ -62,5 +69,9 @@ public class MessageEditController implements Controller {
         }
 
         return null;
+    }
+
+    protected Logger getLogger() {
+        return logger;
     }
 }

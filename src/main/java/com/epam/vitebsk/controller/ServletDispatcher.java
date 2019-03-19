@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.epam.vitebsk.controller.controllers.Controller;
 import com.epam.vitebsk.controller.controllers.ControllerFactory;
+import com.epam.vitebsk.controller.exception.ControllerInstantiationException;
 import com.epam.vitebsk.controller.service.MailService;
 import com.epam.vitebsk.controller.service.ServiceFactory;
 import com.epam.vitebsk.model.dao.DAOFactory;
@@ -25,7 +26,7 @@ public class ServletDispatcher extends HttpServlet {
     private static final String JSP_EXTENSION = ".jsp";
     private static final String JSP_FOLDER = "/WEB-INF/jsp";
 
-    private static final String CONNECTION_PROPERTIES = "/connection.properties";
+    private static final String CONNECTION_RESOURCE = "/connection.properties";
 
     private ConnectionPool connectionPool;
 
@@ -35,7 +36,7 @@ public class ServletDispatcher extends HttpServlet {
     public void init(ServletConfig config) throws ServletException {
         super.init(config);
 
-        Map<String, String> map = new Resource(CONNECTION_PROPERTIES).load().toMap();
+        Map<String, String> map = new Resource(CONNECTION_RESOURCE).load().toMap();
 
         try {
             connectionPool = new ConnectionPool(map);
@@ -87,6 +88,10 @@ public class ServletDispatcher extends HttpServlet {
     }
 
     public Controller getController(String url) throws ServletException {
-        return ControllerFactory.getController(url);
+        try {
+            return ControllerFactory.getController(url);
+        } catch (ControllerInstantiationException e) {
+            throw new ServletException(e);
+        }
     }
 }

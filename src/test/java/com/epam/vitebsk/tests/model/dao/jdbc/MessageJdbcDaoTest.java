@@ -21,26 +21,26 @@ import com.epam.vitebsk.model.entity.User;
 @RunWith(MockitoJUnitRunner.class)
 public class MessageJdbcDaoTest extends Mockito {
 
-    private static Long USER1_ID = 1L;
-    private static String USERNAME1 = "andrey.koval@mail.ru";
-    private static String PASSWORD1 = "simplePassword";
-    private static String DISPLAY_NAME1 = "Andrey";
+    private static final Long USER1_ID = 1L;
+    private static final String USERNAME1 = "andrey.koval@mail.ru";
+    private static final String PASSWORD1 = "simplePassword";
+    private static final String DISPLAY_NAME1 = "Andrey";
 
-    private static Long USER2_ID = 2L;
-    private static String USERNAME2 = "mike.lohan@mail.ru";
-    private static String PASSWORD2 = "hardPassword";
-    private static String DISPLAY_NAME2 = "Mike";
+    private static final Long USER2_ID = 2L;
+    private static final String USERNAME2 = "mike.lohan@mail.ru";
+    private static final String PASSWORD2 = "hardPassword";
+    private static final String DISPLAY_NAME2 = "Mike";
 
-    private static Long MESSAGE_ID = 1L;
-    private static String SUBJECT = "Greeting";
-    private static String TEXT = "Hello";
+    private static final Long MESSAGE_ID = 1L;
+    private static final String SUBJECT = "Greeting";
+    private static final String TEXT = "Hello";
 
-    private static String INSERT = "insert into message values(default, ?, ?, ?, ?)";
-    private static String UPDATE = "update message set subject = ?, message = ?, sender_id = ?, recipient_id = ? where id = ?";
-    private static String DELETE = "delete from message where id = ?";
-    private static String SELECT_ONE = "select * from message where id = ?";
-    private static String SELECT_LIST_BY_SENDER = "select * from message where sender_id = ?";
-    private static String SELECT_LIST_BY_RECIPIENT = "select * from message where recipient_id = ?";
+    private static final String INSERT = "insert into message values(default, ?, ?, ?, ?)";
+    private static final String UPDATE = "update message set subject = ?, message = ?, sender_id = ?, recipient_id = ? where id = ?";
+    private static final String DELETE = "delete from message where id = ?";
+    private static final String SELECT_ONE = "select * from message where id = ?";
+    private static final String SELECT_LIST_BY_SENDER = "select * from message where sender_id = ?";
+    private static final String SELECT_LIST_BY_RECIPIENT = "select * from message where recipient_id = ?";
 
     private MessageJdbcDao messageJdbcDao;
 

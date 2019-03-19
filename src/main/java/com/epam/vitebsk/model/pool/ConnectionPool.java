@@ -11,6 +11,9 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.epam.vitebsk.model.CloseConnectionException;
+import com.epam.vitebsk.model.exception.CreateConnectionException;
+
 public class ConnectionPool {
 
     private static final String CONNECTIVITY = "jdbc";
@@ -24,6 +27,10 @@ public class ConnectionPool {
     private static final String PASSWORD_KEY = "password";
     private static final String DRIVER_KEY = "driver";
 
+    private static final String UNABLE_CLOSE_CONNECTION = "Can't close connection";
+    private static final String UNABLE_CREATE_CONNECTION = "Can't create connection";
+    private static final String CONNETION_POOL_IS_FULL = "All connections occupied. Increase maximum pool size.";
+
     private Logger logger = LoggerFactory.getLogger(getClass());
 
     private int maxPool;
@@ -31,7 +38,6 @@ public class ConnectionPool {
     private String username;
     private String password;
 
-    @SuppressWarnings("unused")
     private String driver;
 
     private List<PooledConnection> freeConnections, usedConnections;
@@ -82,9 +88,9 @@ public class ConnectionPool {
         for (PooledConnection pooledConnection : connections) {
             try {
                 pooledConnection.getRawConnection().close();
-            } catch (Exception e) {
-                // TODO: can't close connection exception plus clarify exception and logging
-                getLogger().info("Unable to close connection");
+            } catch (SQLException e) {
+                getLogger().error(UNABLE_CLOSE_CONNECTION, e);
+                throw new CloseConnectionException(UNABLE_CLOSE_CONNECTION, e);
             }
         }
     }
@@ -97,8 +103,8 @@ public class ConnectionPool {
         } else if (usedConnections.size() < maxPool) {
             pooledConnection = createPooledConnection();
         } else {
-            // TODO: ConnectionPool was full exception message and logging
-            throw new RuntimeException("Unable to create a connection");
+            getLogger().error(CONNETION_POOL_IS_FULL);
+            throw new CreateConnectionException(CONNETION_POOL_IS_FULL);
         }
 
         usedConnections.add(pooledConnection);
@@ -113,11 +119,9 @@ public class ConnectionPool {
         try {
             connection = getSimpleConnection();
             pooledConnection = new PooledConnection(this, connection);
-            getLogger().info("Created a new connection");
         } catch (SQLException e) {
-            // TODO: can't create connection exception and logging
-            getLogger().error("Can't create a new connection for {}", url, e);
-            throw e;
+            getLogger().error(UNABLE_CREATE_CONNECTION, e);
+            throw new CreateConnectionException(UNABLE_CREATE_CONNECTION, e);
         }
 
         return pooledConnection;

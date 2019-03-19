@@ -27,10 +27,10 @@ public class ServiceFactoryTest extends Mockito {
     private MailService mailService;
 
     @Mock
-    UserDao userDao;
+    private UserDao userDao;
 
     @Mock
-    MessageDao messageDao;
+    private MessageDao messageDao;
 
     @Before
     public void setUp() {

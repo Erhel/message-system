@@ -23,59 +23,59 @@ import com.epam.vitebsk.model.pool.ConnectionPool;
 public class DAOFactoryTest extends Mockito {
 
     private DAOFactory daoFactory;
-    
+
     @Mock
     private ConnectionPool connectionPool;
-    
+
     @Mock
-    Connection connection;
+    private Connection connection;
 
     @Before
     public void setUp() {
         daoFactory = new DAOFactory(connectionPool);
     }
-    
+
     @Test
     public void getMessageDaoTest() {
         DAOFactory spy = spy(daoFactory);
         doReturn(connection).when(spy).getConnection();
-        
+
         MessageDao dao = spy.getMessageDao();
-        
-        verify(spy,times(1)).getConnection();
-        
-        assertThat(dao).isExactlyInstanceOf(MessageJdbcDao.class);        
+
+        verify(spy, times(1)).getConnection();
+
+        assertThat(dao).isExactlyInstanceOf(MessageJdbcDao.class);
     }
-    
+
     @Test
     public void getUserDaoTest() {
         DAOFactory spy = spy(daoFactory);
         doReturn(connection).when(spy).getConnection();
-        
+
         UserDao dao = spy.getUserDao();
-        
-        verify(spy,times(1)).getConnection();
-        
-        assertThat(dao).isExactlyInstanceOf(UserJdbcDao.class);        
+
+        verify(spy, times(1)).getConnection();
+
+        assertThat(dao).isExactlyInstanceOf(UserJdbcDao.class);
     }
-    
+
     @Test
     public void getConnectionTest() throws SQLException {
         when(connectionPool.getConnection()).thenReturn(connection);
-        
+
         Connection actual = daoFactory.getConnection();
-        
-        verify(connectionPool,times(1)).getConnection();
-        
-        assertThat(actual).isEqualTo(connection);        
+
+        verify(connectionPool, times(1)).getConnection();
+
+        assertThat(actual).isEqualTo(connection);
     }
-    
+
     @Test(expected = RuntimeException.class)
     public void getConnectionExceptionTest() throws SQLException {
         doThrow(SQLException.class).when(connectionPool).getConnection();
-        
+
         Connection actual = daoFactory.getConnection();
-        
-        verify(connectionPool,times(1)).getConnection();    
+
+        verify(connectionPool, times(1)).getConnection();
     }
 }

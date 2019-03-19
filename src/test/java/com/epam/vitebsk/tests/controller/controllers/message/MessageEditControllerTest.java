@@ -27,10 +27,10 @@ public class MessageEditControllerTest extends MessageTestSupport {
     private Message message;
     private Message message2;
 
-    private static Long USER3_ID = 3L;
-    private static String USERNAME3 = "tim.johans@mail.ru";
+    private static final Long USER3_ID = 3L;
+    private static final String USERNAME3 = "tim.johans@mail.ru";
 
-    private static String ID_PARAMETR = "id";
+    private static final String ID_PARAMETR = "id";
 
     @Before
     public void setUp() {

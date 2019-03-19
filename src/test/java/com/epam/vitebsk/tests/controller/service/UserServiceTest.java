@@ -11,41 +11,41 @@ import com.epam.vitebsk.model.dao.UserDao;
 import com.epam.vitebsk.model.entity.User;
 
 public class UserServiceTest extends ServiceTestSupport<Long, User> {
-	
-	private UserService userService;
-	
-	private User user;
-	
-	@Mock
-	UserDao userDao;
-	
-	@Before
-	public void setUp() {
-		super.setUp();
-		userService = new UserService();
-		user = new User(USER_ID, USERNAME, PASSWORD, DISPLAY_NAME);
-		userService.setDao(userDao);
-	}
 
-	@Test
-	public void findByLoginAndPasswordTest() {
-		when(userDao.readByLoginAndPassword(USERNAME, PASSWORD)).thenReturn(user);
-		
-		User userResponse = userService.findByLoginAndPassword(USERNAME, PASSWORD);
-		
-		verify(userDao, times(1)).readByLoginAndPassword(anyString(), anyString());
-		
-		assertThat(userResponse).isEqualToComparingFieldByField(user);
-	}
-	
-	@Test
-	public void findByUsername() {
-		when(userDao.readByUsername(USERNAME)).thenReturn(user);
-		
-		User userResponse = userService.findByUsername(USERNAME);
-		
-		verify(userDao, times(1)).readByUsername(anyString());
-		
+    private UserService userService;
+
+    private User user;
+
+    @Mock
+    UserDao userDao;
+
+    @Before
+    public void setUp() {
+        super.setUp();
+        userService = new UserService();
+        user = new User(USER_ID, USERNAME, PASSWORD, DISPLAY_NAME);
+        userService.setDao(userDao);
+    }
+
+    @Test
+    public void findByLoginAndPasswordTest() {
+        when(userDao.readByLoginAndPassword(USERNAME, PASSWORD)).thenReturn(user);
+
+        User userResponse = userService.findByLoginAndPassword(USERNAME, PASSWORD);
+
+        verify(userDao, times(1)).readByLoginAndPassword(anyString(), anyString());
+
+        assertThat(userResponse).isEqualToComparingFieldByField(user);
+    }
+
+    @Test
+    public void findByUsername() {
+        when(userDao.readByUsername(USERNAME)).thenReturn(user);
+
+        User userResponse = userService.findByUsername(USERNAME);
+
+        verify(userDao, times(1)).readByUsername(anyString());
+
         assertThat(userResponse).isEqualToComparingFieldByField(user);
     }
 }
