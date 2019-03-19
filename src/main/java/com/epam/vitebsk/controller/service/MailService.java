@@ -1,6 +1,7 @@
 package com.epam.vitebsk.controller.service;
 
 import java.util.Date;
+import java.util.Map;
 import java.util.Properties;
 
 import javax.mail.Authenticator;
@@ -21,6 +22,11 @@ public class MailService {
     private static final String PORT_PROPERTY = "mail.smtp.port";
     private static final String AUTH_PROPERTY = "mail.smtp.auth";
 
+    private static final String HOST = "host";
+    private static final String PORT = "port";
+    private static final String USERNAME = "username";
+    private static final String PASSWORD = "password";
+
     private static final String UNABLE_SEND_MESSAGE = "Can't send message";
 
     private final String username;
@@ -34,6 +40,13 @@ public class MailService {
         this.port = port;
         this.username = username;
         this.password = password;
+    }
+
+    public MailService(Map<String, String> map) {
+        this.host = map.get(HOST);
+        this.port = map.get(PORT);
+        this.username = map.get(USERNAME);
+        this.password = map.get(PASSWORD);
     }
 
     public void send(Message message) {

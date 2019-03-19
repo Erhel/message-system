@@ -26,7 +26,8 @@ public class ServletDispatcher extends HttpServlet {
     private static final String JSP_EXTENSION = ".jsp";
     private static final String JSP_FOLDER = "/WEB-INF/jsp";
 
-    private static final String CONNECTION_RESOURCE = "/connection.properties";
+    private static final String CONNECTION_RESOURCE = "/database.properties";
+    private static final String MAIL_PROPERTIES = "/mail.properties";
 
     private ConnectionPool connectionPool;
 
@@ -36,10 +37,10 @@ public class ServletDispatcher extends HttpServlet {
     public void init(ServletConfig config) throws ServletException {
         super.init(config);
 
-        Map<String, String> map = new Resource(CONNECTION_RESOURCE).load().toMap();
+        Map<String, String> databaseMap = new Resource(CONNECTION_RESOURCE).load().toMap();
 
         try {
-            connectionPool = new ConnectionPool(map);
+            connectionPool = new ConnectionPool(databaseMap);
         } catch (ClassNotFoundException e) {
             throw new ServletException(e);
         }
@@ -48,7 +49,8 @@ public class ServletDispatcher extends HttpServlet {
 
         serviceFactory = new ServiceFactory(daoFactory);
 
-        MailService mailService = new MailService("localhost", "25", "message-service@company.com", "password");
+        Map<String, String> mailMap = new Resource(MAIL_PROPERTIES).load().toMap();
+        MailService mailService = new MailService(mailMap);
         serviceFactory.setMailService(mailService);
     }
 
