@@ -4,39 +4,41 @@
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
 <u:navigation-bar title="Write message">
-	<div class="container mt-4">
-		<form method="post" id="saveForm">
-            <c:if test="${not empty message.id}">                
-                <c:set var="readonly" value="readonly"/>
+    <div class="container mt-4">
+        <form method="post" id="saveForm">
+            <c:if test="${not empty message.id}">
+                <c:set var="readonly" value="readonly" />
             </c:if>
-			<div class="form-group">
-				<label for="recipient">Recipient:</label>
-
+            <div class="form-group">
+                <label for="recipient">Recipient:</label>
                 <div class="input-group mb-3">
-                    <input type="email" class="form-control" id="recipient" name="recipient" ${readonly} value="${message.recipient.username}">
+                    <input type="email" class="form-control" id="recipient" name="recipient" ${readonly}
+                        value="${message.recipient.username}">
                     <div class="input-group-append">
-                        <button class="btn btn-outline-secondary" type="button" id="button-recipients" data-toggle="modal" data-target="#recipientsModal">Recipients</button>
+                        <button class="btn btn-outline-secondary" type="button" id="button-recipients"
+                            data-toggle="modal" data-target="#recipientsModal">Recipients</button>
                     </div>
                 </div>
-			</div>
-
-			<div class="form-group">
-				<label for="subject">Subject:</label>
-				<input type="text" class="form-control" id="subject" name="subject" ${readonly} value="${message.subject}">
-			</div>
-			<div class="form-group">
-				<label for="message">Message:</label>
-				<textarea class="form-control" rows="5" id="message" name="message" ${readonly}>${message.message}</textarea>
-			</div>
-		</form>
+            </div>
+            <div class="form-group">
+                <label for="subject">Subject:</label> <input type="text" class="form-control" id="subject"
+                    name="subject" ${readonly} value="${message.subject}">
+            </div>
+            <div class="form-group">
+                <label for="message">Message:</label>
+                <textarea class="form-control" rows="5" id="message" name="message" ${readonly}>${message.message}</textarea>
+            </div>
+        </form>
         <div class="text-right">
             <c:if test="${empty message.id}">
-                <c:url var="urlSendMessage" value="/message/send.html"/>
-    			<button type="submit" formmethod="post" formaction="${urlSendMessage}" form="saveForm" class="btn btn-primary">Send</button>
+                <c:url var="urlSendMessage" value="/message/send.html" />
+                <button type="submit" formmethod="post" formaction="${urlSendMessage}" form="saveForm"
+                    class="btn btn-primary">Send</button>
             </c:if>
-            <c:url var="urlBack" value="/message/list.html"/><a href="${urlBack}" onclick="closeTab()" class="btn btn-primary">Back</a>
+            <c:url var="urlBack" value="/message/list.html" />
+            <a href="${urlBack}" onclick="closeTab()" class="btn btn-primary">Back</a>
         </div>
-	</div>
+    </div>
 
     <div class="modal" id="recipientsModal" tabindex="-1" role="dialog">
         <div class="modal-dialog" role="document">
@@ -55,7 +57,7 @@
                                     <option>${username}</option>
                                 </c:forEach>
                             </select>
-                        </div>            
+                        </div>
                     </form>
                 </div>
                 <div class="modal-footer">
@@ -67,20 +69,19 @@
     </div>
 
     <script type="text/javascript">
-        $('#recipientsModal').on('shown.bs.modal', function(){
-    	  $('#button-recipients').trigger('focus');
-    	});
+                    $('#recipientsModal').on('shown.bs.modal', function() {
+                        $('#button-recipients').trigger('focus');
+                    });
 
-        $('#save-changes').click(function(){
-        	$('#recipientsModal').modal('hide')
-            var val = $('#select-recipients').val();
-            if(!$('#recipient').is('[readonly]')) {
-                $('#recipient').val(val);
-            }
-        });
-        function closeTab()
-        {
-          window.close();
-        }
-     </script>
+                    $('#save-changes').click(function() {
+                        $('#recipientsModal').modal('hide')
+                        var val = $('#select-recipients').val();
+                        if (!$('#recipient').is('[readonly]')) {
+                            $('#recipient').val(val);
+                        }
+                    });
+                    function closeTab() {
+                        window.close();
+                    }
+                    </script>
 </u:navigation-bar>
