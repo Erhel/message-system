@@ -21,6 +21,7 @@ public class LoginController implements Controller {
 
     private static final String LACK_PASSWORD_SYMBOLS = "Password should've at least 6 symbols!";
     private static final String INCORRECT_CREDENTIALS = "Incorrect login or password!";
+    private static final String INCORRECT_LOGIN = "Incorrect login";
 
     private static final Integer MIN_PASSWORD_LENGTH = 6;
 
@@ -43,6 +44,11 @@ public class LoginController implements Controller {
 
         session = req.getSession();
 
+        if (!username.matches("[-._a-zA-Z]{1,}@\\w+\\.\\w+")) {
+            session.setAttribute(INFO_ATTRIBUTE, INCORRECT_LOGIN);
+            return new Response(Route.TO_LOGIN);
+        }
+        
         if (password.length() < MIN_PASSWORD_LENGTH) {
             session.setAttribute(INFO_ATTRIBUTE, LACK_PASSWORD_SYMBOLS);
             return new Response(Route.TO_LOGIN);
