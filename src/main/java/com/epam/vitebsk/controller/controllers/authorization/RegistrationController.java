@@ -43,13 +43,16 @@ public class RegistrationController implements Controller {
         String confirm = req.getParameter(CONFIRM_PARAMETR);
 
         session = req.getSession();
+
         if (session != null) {
-            session.invalidate();
+            session.removeAttribute("user");
         }
 
         if (displayName == null || username == null || password == null || confirm == null) {
             return null;
         }
+
+        session = req.getSession();
 
         if (password.length() < MIN_PASSWORD_LENGTH) {
             return responseWithInfoMessage(Route.TO_REGISTRATION, LACK_PASSWORD_SYMBOLS);
